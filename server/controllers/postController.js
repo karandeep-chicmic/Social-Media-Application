@@ -1,0 +1,110 @@
+const { commentsModel } = require("../models/commentsModel");
+const { postsModel } = require("../models/postsModel");
+const { userModel } = require("../models/userModel");
+const { RESPONSE_MSGS } = require("../utils/constants");
+
+const createPost = async (payload) => {
+  try {
+    const { file, caption, taggedPeople, userId } = payload;
+    const post = {
+      caption: caption,
+      taggedPeople: taggedPeople || [],
+      userUploaded: userId,
+      imageOrVideo: file.path,
+    };
+
+    const created = await postsModel.create(post);
+
+    if (!created) {
+      return {
+        statusCode: 400,
+        data: RESPONSE_MSGS.FAILED_TO_POST,
+      };
+    }
+
+    return {
+      statusCode: 201,
+      data: {
+        message: RESPONSE_MSGS.SUCCESS,
+        data: created,
+      },
+    };
+  } catch (error) {
+    console.log("ERROR IS:", error);
+    return {
+      statusCode: 500,
+      data: RESPONSE_MSGS.INTERNAL_SERVER_ERR,
+    };
+  }
+};
+
+
+const getPosts = async (payload) => {
+  try {
+    const { userId } = payload;
+
+    const posts = await postsModel.find({ userUploaded: userId });
+
+    return {
+      statusCode: 200,
+      data: posts,
+    };
+  } catch (error) {
+    console.log("ERROR IS:", error);
+    return {
+      statusCode: 500,
+      data: RESPONSE_MSGS.INTERNAL_SERVER_ERR,
+    };
+  }
+};
+
+const addAComment = async (payload) => {
+  try {
+    const { postId, userId, comment } = payload;
+
+    const getPost = await postsModel.findById(postId);
+    if (!getPost) {
+      return {
+        statusCode: 400,
+        data: RESPONSE_MSGS.POST_NOT_FOUND,
+      };
+    }
+
+    
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return {
+        statusCode: 400,
+        data: RESPONSE_MSGS.USER_NOT_EXIST,
+      };
+    }
+    const newComment = {
+      comment,
+      userId: userId,
+      postId: postId,
+    };
+
+    const addTheComment = await commentsModel.create(newComment);
+
+    if (!addTheComment) {
+      return {
+        statusCode: 400,
+        data: RESPONSE_MSGS.FAILURE,
+      };
+    }
+
+    return {
+      statusCode: 200,
+      data: RESPONSE_MSGS.SUCCESS,
+    };
+  } catch (error) {
+    console.log("ERROR IS:", error);
+    return {
+      statusCode: 500,
+      data: RESPONSE_MSGS.INTERNAL_SERVER_ERR,
+    };
+  }
+};
+
+module.exports = { createPost, getPosts, addAComment };

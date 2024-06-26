@@ -21,6 +21,8 @@ const RESPONSE_MSGS = {
   GENERATE_OTP_FIRST: "You need to generate the otp first!!",
   OTP_VERIFIED_SUCCESSFULLY: "OTP is verified Successfully",
   INVALID_OTP: "Invalid Otp, Try Again !!",
+  FAILED_TO_POST: "Failed to post!!",
+  POST_NOT_FOUND: " Cant Find the Post!!",
 };
 
 const BCRYPT = {

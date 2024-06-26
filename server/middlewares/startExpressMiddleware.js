@@ -5,6 +5,7 @@ const path = require("path")
 
 const { validate } = require("./validateMiddleware");
 const { routes } = require("../routes");
+const { authorizeUser } = require("./authMiddleware");
 
 const storage = multer.diskStorage({
   destination: "./public",
@@ -50,7 +51,7 @@ const startExpressApplication =async (app) => {
   routes.forEach((data) => {
     let middlewares = [];
     if (data.auth) {
-      middlewares.push();
+      middlewares.push(authorizeUser());
     }
     if (data.file) {
       middlewares.push(uploads.single("file"));
