@@ -16,10 +16,18 @@ const RESPONSE_MSGS = {
   NO_MESSAGES: "No Message found!!",
   NO_ROOMS_FOUND: "Cannot Find room for the user !!",
   VERIFY_EMAIL: "Please Verify Email!!",
+  ALREADY_VERIFIED: "User is already verified",
+  CREATE_USER: "First Create user!",
+  GENERATE_OTP_FIRST: "You need to generate the otp first!!",
+  OTP_VERIFIED_SUCCESSFULLY: "OTP is verified Successfully",
+  INVALID_OTP: "Invalid Otp, Try Again !!",
 };
 
 const BCRYPT = {
   SALT_ROUNDS: 10,
 };
 
-module.exports = { PORT, RESPONSE_MSGS , BCRYPT};
+const SECRET_KEY =
+  "537f5ede884e9d34bb82f7c54c5c7dd0e9fcbe533584fcefe69df5231bd02e453bdbcd264c6bcebfaa31a97553ff3723d87d629a9821a07f82799253edb94a5f";
+
+module.exports = { PORT, RESPONSE_MSGS, BCRYPT, SECRET_KEY };

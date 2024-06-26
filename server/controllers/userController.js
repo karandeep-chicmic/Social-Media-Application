@@ -1,5 +1,5 @@
 const { userModel } = require("../models/userModel");
-const { RESPONSE_MSGS, BCRYPT } = require("../utils/constants");
+const { RESPONSE_MSGS, BCRYPT, SECRET_KEY } = require("../utils/constants");
 const jwt = require("jsonwebtoken");
 const path = require("path")
 
@@ -7,8 +7,6 @@ const bcrypt = require("bcrypt");
 
 const loginUser = async (payload) => {
   const { username, password } = payload;
-
-  console.log(username, password);
 
   var passwordMatch;
   var userFound = await userModel.findOne({ username: username });
@@ -24,14 +22,17 @@ const loginUser = async (payload) => {
   if (!userFound.isVerified) {
     return {
       statusCode: 421,
-      data: RESPONSE_MSGS.VERIFY_EMAIL,
+      data: {
+        message: RESPONSE_MSGS.VERIFY_EMAIL,
+        email: userFound.email,
+      },
     };
   }
 
   if (passwordMatch) {
     const token = jwt.sign(
-      { id: userFound._id, email: email },
-      process.env.TOKEN_SECRET,
+      { id: userFound._id, email: userFound.email },
+      SECRET_KEY,
       {
         expiresIn: "2500s",
       }
@@ -42,7 +43,7 @@ const loginUser = async (payload) => {
       data: {
         message: RESPONSE_MSGS.SUCCESS,
         token: token,
-        email: email,
+        email: userFound.email,
         userId: userFound._id,
       },
     };
@@ -56,6 +57,7 @@ const loginUser = async (payload) => {
 
 const registerUser = async (payload) => {
   const { name, username, email, password, file } = payload;
+  
   const userExist = await userModel.findOne({ username: username });
   if (userExist && userExist.isVerified) {
     return {
@@ -65,7 +67,10 @@ const registerUser = async (payload) => {
   } else if (userExist && !userExist.isVerified) {
     return {
       statusCode: 421,
-      data: RESPONSE_MSGS.VERIFY_EMAIL,
+      data: {
+        message: RESPONSE_MSGS.VERIFY_EMAIL,
+        email: userExist.email,
+      },
     };
   }
 

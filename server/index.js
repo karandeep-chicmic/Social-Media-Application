@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-// const {userModel} = require("./models/userModel")
+
 
 const { PORT } = require("./utils/constants");
 const startExpressApplication = require("./middlewares/startExpressMiddleware");

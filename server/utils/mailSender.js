@@ -7,15 +7,17 @@ const mailSender = async (email, title, body) => {
   try {
     // Create a Transporter to send emails
     let transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false,
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
+        user: "775149001@smtp-brevo.com",
+        pass: "Hrf85YPBzGFZtCq2",
       },
     });
     // Send emails to users
     let info = await transporter.sendMail({
-      from: "Karandeep Singh",
+      from: "karandeep.singh@chicmic.co.in",
       to: email,
       subject: title,
       html: body,
