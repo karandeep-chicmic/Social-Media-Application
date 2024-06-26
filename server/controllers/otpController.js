@@ -1,7 +1,8 @@
 const { userModel } = require("../models/userModel");
 const { otpModel } = require("../models/otpModel");
 const otpGenerator = require("otp-generator");
-const { RESPONSE_MSGS } = require("../utils/constants");
+const { RESPONSE_MSGS, SECRET_KEY } = require("../utils/constants");
+const jwt = require("jsonwebtoken")
 
 const otpSend = async (payload) => {
   try {
@@ -67,15 +68,27 @@ const otpVerify = async (payload) => {
     console.log(otpToMatch);
 
     if (String(otp) === String(otpToMatch.otp)) {
-      await userModel.updateOne(
+      const userFound = await userModel.findOneAndUpdate(
         { email: email },
-        { $set: { isVerified: true } }
+        { $set: { isVerified: true } },
+        {new: true}
       );
 
+      const token = jwt.sign(
+        { id: userFound._id, email: userFound.email },
+        SECRET_KEY,
+        {
+          expiresIn: "2500s",
+        }
+      );
+      
       return {
         statusCode: 200,
         data: {
           message: RESPONSE_MSGS.OTP_VERIFIED_SUCCESSFULLY,
+          token: token,
+          email: userFound.email,
+          userId : userFound._id 
         },
       };
     } else {

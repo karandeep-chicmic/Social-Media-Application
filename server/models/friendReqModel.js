@@ -19,9 +19,10 @@ const friendReqSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
-const friendReqModel = mongoose.model("friendReqs", friendReqSchema, "friendReqs");
+const friendsModel = mongoose.model("friends", friendReqSchema, "friends");
 
-module.exports = friendReqModel;
+module.exports = friendsModel;

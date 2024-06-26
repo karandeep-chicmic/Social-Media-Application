@@ -1,7 +1,7 @@
 const { userModel } = require("../models/userModel");
+
 const { RESPONSE_MSGS, BCRYPT, SECRET_KEY } = require("../utils/constants");
 const jwt = require("jsonwebtoken");
-const path = require("path")
 
 const bcrypt = require("bcrypt");
 
@@ -57,8 +57,11 @@ const loginUser = async (payload) => {
 
 const registerUser = async (payload) => {
   const { name, username, email, password, file } = payload;
-  
-  const userExist = await userModel.findOne({ username: username });
+
+  const userExist = await userModel.findOne({
+    username: username,
+    email: email,
+  });
   if (userExist && userExist.isVerified) {
     return {
       statusCode: 409,

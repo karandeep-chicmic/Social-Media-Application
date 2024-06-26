@@ -3,6 +3,7 @@ const {
   createPost,
   getPosts,
   addAComment,
+  tagUsers,
 } = require("../controllers/postController");
 
 const postRoutes = [
@@ -39,6 +40,26 @@ const postRoutes = [
     file: false,
     auth: true,
     controller: addAComment,
+  },
+  {
+    method: "POST",
+    path: "/tagUsers",
+    schema: {
+      body: {
+        postId: Joi.string().required(),
+        taggedUsers: Joi.array()
+          .items(
+            Joi.object({
+              id: Joi.string().required(),
+              username: Joi.string().required(),
+            })
+          )
+          .required(),
+      },
+    },
+    file: false,
+    auth: true,
+    controller: tagUsers,
   },
 ];
 

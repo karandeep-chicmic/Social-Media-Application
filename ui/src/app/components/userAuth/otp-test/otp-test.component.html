@@ -1,0 +1,21 @@
+<section>
+  <div class="container">
+    <h1>Enter One Time Password</h1>
+    <h4 class="title">from your Email...</h4>
+    <form [formGroup]="otpForm" id="otp-form">
+      <div formArrayName="otp">
+        <input
+          *ngFor="let control of otpControls; let i = index"
+          type="text"
+          class="otp-input"
+          id="otp-input-{{ i }}"
+          maxlength="1"
+          [formControlName]="i"
+          (keyup)="onKeyUp($event, i)"
+        />
+      </div>
+    </form>
+    <button (click)="verifyOtp()" id="verify-btn">Verify OTP</button>
+  </div>
+  <button class="send-otp-again">send OTP again</button>
+</section>

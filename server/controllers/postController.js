@@ -1,4 +1,5 @@
 const { commentsModel } = require("../models/commentsModel");
+const friendsModel = require("../models/friendReqModel");
 const { postsModel } = require("../models/postsModel");
 const { userModel } = require("../models/userModel");
 const { RESPONSE_MSGS } = require("../utils/constants");
@@ -38,7 +39,6 @@ const createPost = async (payload) => {
   }
 };
 
-
 const getPosts = async (payload) => {
   try {
     const { userId } = payload;
@@ -70,15 +70,27 @@ const addAComment = async (payload) => {
       };
     }
 
-    
-    const user = await userModel.findById(userId);
+    const postUserId = getPost.userUploaded;
 
-    if (!user) {
+    const friendship = await friendsModel.find({
+      $and: [
+        {
+          $or: [
+            { user: userId, friend: postUserId },
+            { user: postUserId, friend: userId },
+          ],
+        },
+        { reqAccepted: true },
+      ],
+    });
+
+    if (friendship.length === 0) {
       return {
         statusCode: 400,
-        data: RESPONSE_MSGS.USER_NOT_EXIST,
+        data: RESPONSE_MSGS.NOT_FRIENDS,
       };
     }
+
     const newComment = {
       comment,
       userId: userId,
@@ -107,4 +119,47 @@ const addAComment = async (payload) => {
   }
 };
 
-module.exports = { createPost, getPosts, addAComment };
+const tagUsers = async (payload) => {
+  try {
+    const { postId, userId, taggedUsers } = payload;
+    const post = await postsModel.findById(postId);
+
+    if (String(post.userUploaded) !== String(userId)) {
+      return {
+        statusCode: 400,
+        data: RESPONSE_MSGS.INVALID_CREDENTIALS,
+      };
+    }
+
+    const prevTaggedUsers = [...post.taggedPeople];
+
+    taggedUsers.forEach((data) => {
+      prevTaggedUsers.push(data);
+    });
+
+    const updateTaggedUsers = await postsModel.updateOne(
+      { _id: postId },
+      { $set: { taggedPeople: prevTaggedUsers } }
+    );
+
+    if (!updateTaggedUsers) {
+      return {
+        statusCode: 400,
+        data: RESPONSE_MSGS.FAILURE,
+      };
+    }
+
+    return {
+      statusCode: 200,
+      data: RESPONSE_MSGS.SUCCESS,
+    };
+  } catch (error) {
+    console.log("ERROR IS:", error);
+    return {
+      statusCode: 500,
+      data: RESPONSE_MSGS.INTERNAL_SERVER_ERR,
+    };
+  }
+};
+
+module.exports = { createPost, getPosts, addAComment, tagUsers };

@@ -17,6 +17,7 @@ const commentsSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
