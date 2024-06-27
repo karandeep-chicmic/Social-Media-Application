@@ -43,7 +43,9 @@ const getPosts = async (payload) => {
   try {
     const { userId } = payload;
 
-    const posts = await postsModel.find({ userUploaded: userId });
+    const posts = await postsModel
+      .find({ userUploaded: userId })
+      .sort({ createdAt: -1 });
 
     return {
       statusCode: 200,
@@ -162,4 +164,53 @@ const tagUsers = async (payload) => {
   }
 };
 
-module.exports = { createPost, getPosts, addAComment, tagUsers };
+const feedForUser = async (payload) => {
+  try {
+    const { userId } = payload;
+    const posts = await postsModel.find({}).populate("userUploaded", ["username", "profilePicture"]);
+
+    const updatedPosts = await Promise.all(
+      posts.map(async (data) => {
+        const { userUploaded } = data;
+        const friends = await friendsModel.find({
+          $and: [
+            {
+              $or: [
+                { user: userId, friend: userUploaded._id },
+                { user: userUploaded._id, friend: userId },
+              ],
+            },
+            { reqAccepted: true },
+          ],
+        });
+
+        if (friends.length === 0) {
+          return null;
+        } else {
+          return data;
+        }
+      })
+    );
+
+    const filteredPosts = updatedPosts.filter((post) => post !== null);
+
+    return {
+      statusCode: 200,
+      data: filteredPosts,
+    };
+  } catch (error) {
+    console.log("ERROR IS:", error);
+    return {
+      statusCode: 500,
+      data: RESPONSE_MSGS.INTERNAL_SERVER_ERR,
+    };
+  }
+};
+
+module.exports = {
+  createPost,
+  getPosts,
+  addAComment,
+  tagUsers,
+  feedForUser,
+};

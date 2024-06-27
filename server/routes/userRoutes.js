@@ -1,5 +1,10 @@
 const Joi = require("joi");
-const { loginUser, registerUser } = require("../controllers/userController");
+const {
+  loginUser,
+  registerUser,
+  getUserDetails,
+  getOwnDetails,
+} = require("../controllers/userController");
 
 const userRoutes = [
   {
@@ -30,6 +35,26 @@ const userRoutes = [
     auth: false,
     file: true,
     controller: registerUser,
+  },
+  {
+    method: "GET",
+    path: "/user/:friendId",
+    schema: {
+      params: {
+        friendId: Joi.string().required(),
+      },
+    },
+    auth: true,
+    file: false,
+    controller: getUserDetails,
+  },
+  {
+    method: "GET",
+    path: "/userDetails",
+    schema: {},
+    auth: true,
+    file: false,
+    controller: getOwnDetails,
   },
 ];
 

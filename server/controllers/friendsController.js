@@ -22,7 +22,7 @@ const sendFriendReq = async (payload) => {
       statusCode: 201,
       data: RESPONSE_MSGS.FRIEND_REQUEST_SENT,
     };
-  } catch (error) { 
+  } catch (error) {
     console.log("ERROR IS:", error);
     return {
       statusCode: 500,
@@ -73,4 +73,31 @@ const acceptFriendReq = async (payload) => {
   }
 };
 
-module.exports = { sendFriendReq, acceptFriendReq };
+const friendsOrNot = async (payload) => {
+  const { userId, friendId } = payload;
+
+  const friends = await friendsModel.find({
+    $and: [
+      {
+        $or: [
+          { user: userId, friend: friendId },
+          { user: friendId, friend: userId },
+        ],
+      },
+      { reqAccepted: true },
+    ],
+  });
+  if (friends.length === 0) {
+    return {
+      statusCode: 400,
+      data: RESPONSE_MSGS.NOT_FRIENDS,
+    };
+  }
+
+  return {
+    statusCode: 200,
+    data: RESPONSE_MSGS.FRIENDS,
+  };
+};
+
+module.exports = { sendFriendReq, acceptFriendReq, friendsOrNot };

@@ -60,25 +60,15 @@ export class RegisterComponent {
 
     this.apiCalls.registerUser(formData).subscribe({
       next: (data: any) => {
-        localStorage.setItem('email', data.email);
+        localStorage.setItem('email', data.userDetails.email);
+        this.router.navigate([ROUTES_UI.OTP_TEST]);
       },
       error: (err) => {
         console.log(err);
         if (err.status === 421) {
           localStorage.setItem('email', err.error.email);
 
-          this.apiCalls.sendOtp(err.error.email).subscribe({
-            next: (data) => {
-              console.log(data);
-
-              this.sweetAlert.success('Otp sent successfully');
-              this.router.navigate([ROUTES_UI.OTP_TEST]);
-            },
-            error: (err) => {
-              console.log('ERROR IS:', err);
-              this.sweetAlert.error(err);
-            },
-          });
+          this.router.navigate([ROUTES_UI.OTP_TEST]);
         }
 
         this.sweetAlert.error(err.error);

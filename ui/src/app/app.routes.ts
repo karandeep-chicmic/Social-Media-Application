@@ -6,6 +6,8 @@ import { OtpTestComponent } from './components/userAuth/otp-test/otp-test.compon
 import { FeedComponent } from './components/mainPages/feed/feed.component';
 import { PageNotFoundComponent } from './components/home/page-not-found/page-not-found.component';
 import { canActivate, canActivateLogin } from './services/auth.guard';
+import { UserPageComponent } from './components/mainPages/user-page/user-page.component';
+import { SettingsPageComponent } from './components/mainPages/settings-page/settings-page.component';
 
 export const routes: Routes = [
   { path: ROUTES_UI.DEFAULT, pathMatch: 'full', redirectTo: ROUTES_UI.LOGIN },
@@ -27,6 +29,16 @@ export const routes: Routes = [
   {
     path: ROUTES_UI.FEED,
     component: FeedComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: ROUTES_UI.USER_POSTS_PAGE,
+    component: UserPageComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: ROUTES_UI.SETTINGS,
+    component: SettingsPageComponent,
     canActivate: [canActivate],
   },
   { path: ROUTES_UI.WILDCARD_ROUTE, component: PageNotFoundComponent },

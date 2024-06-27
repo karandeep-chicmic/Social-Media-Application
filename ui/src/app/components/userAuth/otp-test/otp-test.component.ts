@@ -11,6 +11,7 @@ import { ApiCallsService } from '../../../services/api-calls.service';
 import { SweetAlertService } from '../../../services/sweet-alert.service';
 import { Router } from '@angular/router';
 import { ROUTES_UI } from '../../../constants';
+import { CommonFunctionsAndVarsService } from '../../../services/common-functions-and-vars.service';
 
 @Component({
   selector: 'app-otp-test',
@@ -19,11 +20,14 @@ import { ROUTES_UI } from '../../../constants';
   templateUrl: './otp-test.component.html',
   styleUrl: './otp-test.component.css',
 })
-export class OtpTestComponent {
+export class OtpTestComponent implements OnInit {
   fb: FormBuilder = inject(FormBuilder);
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
   router: Router = inject(Router);
+  commonFunctions: CommonFunctionsAndVarsService = inject(
+    CommonFunctionsAndVarsService
+  );
 
   otpForm: FormGroup = this.fb.group({
     otp: this.fb.array(
@@ -37,6 +41,20 @@ export class OtpTestComponent {
         )
     ),
   });
+
+  ngOnInit(): void {
+    const email: string = localStorage.getItem('email') ?? '';
+    this.apiCalls.sendOtp(email).subscribe({
+      next: (res: any) => {
+        this.sweetAlert.success('Otp sent successfully to email !!');
+      },
+      error: (err: any) => {
+        this.sweetAlert.error('Something went wrong !!');
+      },
+    });
+
+    
+  }
 
   get otpControls() {
     return (this.otpForm.get('otp') as FormArray).controls;
@@ -54,9 +72,9 @@ export class OtpTestComponent {
           localStorage.setItem('token', res.token);
           localStorage.setItem('userId', res.userId);
 
-          this.router.navigate([ROUTES_UI.FEED]);
-
           this.sweetAlert.success(res.message);
+          this.commonFunctions.showNavbar.next(true);
+          this.router.navigate([ROUTES_UI.FEED]);
         },
         error: (err) => {
           console.log(err);

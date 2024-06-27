@@ -2,7 +2,7 @@ const { userModel } = require("../models/userModel");
 const { otpModel } = require("../models/otpModel");
 const otpGenerator = require("otp-generator");
 const { RESPONSE_MSGS, SECRET_KEY } = require("../utils/constants");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 const otpSend = async (payload) => {
   try {
@@ -36,11 +36,12 @@ const otpSend = async (payload) => {
 
     const otpBody = await otpModel.create(otpPayload);
 
+    console.log("OTP is :", otp);
+
     return {
       statusCode: 200,
       data: {
         message: RESPONSE_MSGS.SUCCESS,
-        otp: otp,
       },
     };
   } catch (err) {
@@ -71,7 +72,7 @@ const otpVerify = async (payload) => {
       const userFound = await userModel.findOneAndUpdate(
         { email: email },
         { $set: { isVerified: true } },
-        {new: true}
+        { new: true }
       );
 
       const token = jwt.sign(
@@ -81,14 +82,14 @@ const otpVerify = async (payload) => {
           expiresIn: "2500s",
         }
       );
-      
+
       return {
         statusCode: 200,
         data: {
           message: RESPONSE_MSGS.OTP_VERIFIED_SUCCESSFULLY,
           token: token,
           email: userFound.email,
-          userId : userFound._id 
+          userId: userFound._id,
         },
       };
     } else {

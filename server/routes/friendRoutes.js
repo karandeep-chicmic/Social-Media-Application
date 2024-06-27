@@ -2,6 +2,7 @@ const Joi = require("joi");
 const {
   sendFriendReq,
   acceptFriendReq,
+  friendsOrNot,
 } = require("../controllers/friendsController");
 const friendRoutes = [
   {
@@ -28,6 +29,18 @@ const friendRoutes = [
     file: false,
     controller: acceptFriendReq,
   },
+  {
+    method: "GET",
+    path: "/friendsOrNot/:friendId",
+    schema: {
+      params: {
+        friendId: Joi.string().required(),
+      },
+    },
+    auth: true,
+    file: false,
+    controller: friendsOrNot,
+  }
 ];
 
 module.exports = friendRoutes;

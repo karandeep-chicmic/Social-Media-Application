@@ -24,8 +24,14 @@ const RESPONSE_MSGS = {
   FAILED_TO_POST: "Failed to post !!",
   POST_NOT_FOUND: " Cant Find the Post !!",
   NOT_FRIENDS: "Users are Not Friends !!",
+  FRIENDS: "Users are friends !!",
   FRIEND_REQUEST_SENT: "Friend Request Sent !!",
-  FRIEND_REQUEST_ACCEPTED: "Friend Request Accepted !!"
+  FRIEND_REQUEST_ACCEPTED: "Friend Request Accepted !!",
+  NO_POSTS: "No Posts for User !!",
+  ALREADY_LIKED: "You have already liked this post !!",
+  LIKE_POST: "post liked successfully !!",
+  NOT_FRIEND_AND_PRIVATE_ACC:
+    "Users are not friends and the account is private !!",
 };
 
 const BCRYPT = {

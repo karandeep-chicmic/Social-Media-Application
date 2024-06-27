@@ -10,6 +10,7 @@ import { ApiCallsService } from '../../../services/api-calls.service';
 import { Router, RouterModule } from '@angular/router';
 import { SweetAlertService } from '../../../services/sweet-alert.service';
 import { ROUTES_UI } from '../../../constants';
+import { CommonFunctionsAndVarsService } from '../../../services/common-functions-and-vars.service';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,9 @@ export class LoginComponent {
   formBuilder: FormBuilder = inject(FormBuilder);
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
+  commonFunctions: CommonFunctionsAndVarsService = inject(
+    CommonFunctionsAndVarsService
+  );
 
   router: Router = inject(Router);
 
@@ -47,6 +51,7 @@ export class LoginComponent {
 
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.userId);
+        this.commonFunctions.showNavbar.next(true);
         this.router.navigate([ROUTES_UI.FEED]);
       },
       error: (err) => {

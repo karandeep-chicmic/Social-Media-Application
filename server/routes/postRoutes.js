@@ -4,6 +4,7 @@ const {
   getPosts,
   addAComment,
   tagUsers,
+  feedForUser,
 } = require("../controllers/postController");
 
 const postRoutes = [
@@ -26,6 +27,7 @@ const postRoutes = [
     path: "/getPosts",
     schema: {},
     auth: true,
+    file:false,
     controller: getPosts,
   },
   {
@@ -60,6 +62,14 @@ const postRoutes = [
     file: false,
     auth: true,
     controller: tagUsers,
+  },
+  {
+    method: "GET",
+    path: "/feedForUser",
+    schema: {},
+    file: false,
+    auth: true,
+    controller: feedForUser,
   },
 ];
 
