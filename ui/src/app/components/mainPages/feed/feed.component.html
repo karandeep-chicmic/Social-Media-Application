@@ -1,0 +1,18 @@
+<app-navbar></app-navbar>
+<div class="search-container">
+  <form class="search-form">
+    <input type="text" class="search-input" placeholder="Search" />
+    <button type="submit" class="search-button">Search</button>
+  </form>
+</div>
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h3>User Feed</h3>
+    </div>
+    <div class="card-body">
+      <app-post *ngFor="let post of postsData" [post]="post"></app-post>
+    </div>
+  </div>
+</div>

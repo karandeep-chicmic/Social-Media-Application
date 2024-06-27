@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = require("../utils/constants");
 
 const authorizeUser = () => {
   return (req, res, next) => {
@@ -9,7 +10,7 @@ const authorizeUser = () => {
     if (token) {
       jwt.verify(
         token,
-        "537f5ede884e9d34bb82f7c54c5c7dd0e9fcbe533584fcefe69df5231bd02e453bdbcd264c6bcebfaa31a97553ff3723d87d629a9821a07f82799253edb94a5f",
+        SECRET_KEY,
         (err, data) => {
           if (err) {
             throw err;
