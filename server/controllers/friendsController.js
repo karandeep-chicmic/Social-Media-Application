@@ -5,6 +5,19 @@ const sendFriendReq = async (payload) => {
   try {
     const { userId, friendReqUserId } = payload;
 
+    const findReq = await friendsModel.find({
+      $or: [
+        { $and: [{ user: userId }, { friend: friendReqUserId }] },
+        { $and: [{ user: friendReqUserId }, { friend: friendReqUserId }] },
+      ],
+    });
+
+    if (findReq.length !== 0) {
+      return {
+        statusCode: 400,
+        data: RESPONSE_MSGS.REQ_ALREADY_PRESENT,
+      };
+    }
     const sendReq = await friendsModel.create({
       user: userId,
       friend: friendReqUserId,
@@ -100,4 +113,92 @@ const friendsOrNot = async (payload) => {
   };
 };
 
-module.exports = { sendFriendReq, acceptFriendReq, friendsOrNot };
+const deleteFriend = async (payload) => {
+  const { userId, friendId } = payload;
+  const deleted = await friendsModel.deleteOne({
+    $or: [
+      { user: userId, friend: friendId },
+      { user: friendId, friend: userId },
+    ],
+  });
+
+  if (!deleted) {
+    return {
+      statusCode: 400,
+      data: RESPONSE_MSGS.NOT_FRIENDS,
+    };
+  }
+
+  return {
+    statusCode: 200,
+    data: RESPONSE_MSGS.FRIENDS_DELETED,
+  };
+};
+
+const getFriendRequests = async (payload) => {
+  const { userId } = payload;
+
+  const friendRequests = await friendsModel
+    .find({
+      friend: userId,
+      reqAccepted: false,
+    })
+    .populate("user", ["profilePicture", "username"]);
+
+  if (friendRequests.length === 0) {
+    return {
+      statusCode: 400,
+      data: RESPONSE_MSGS.NO_FRIEND_REQUESTS,
+    };
+  }
+
+  return {
+    statusCode: 200,
+    data: {
+      message: RESPONSE_MSGS.SUCCESS,
+      data: friendRequests,
+    },
+  };
+};
+
+const getUserFriends = async (payload) => {
+  const { userId } = payload;
+  const findUserFriends = await friendsModel.find({
+    $and: [
+      {
+        $or: [{ user: userId }, { friend: userId }],
+      },
+      {
+        reqAccepted: true,
+      },
+    ],
+  });
+
+  await friendsModel.populate(findUserFriends, {
+    path: "user",
+    select: ["username", "profilePicture"],
+  });
+
+  await friendsModel.populate(findUserFriends, {
+    path: "friend",
+    select: ["username", "profilePicture"],
+  });
+  
+
+  return {
+    statusCode: 200,
+    data: {
+      message: RESPONSE_MSGS.SUCCESS,
+      data: findUserFriends,
+    },
+  };
+};
+
+module.exports = {
+  sendFriendReq,
+  acceptFriendReq,
+  friendsOrNot,
+  deleteFriend,
+  getFriendRequests,
+  getUserFriends,
+};

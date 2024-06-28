@@ -14,13 +14,17 @@
         <h3 class="profile-user-name">{{ userData.username }}</h3>
         <br /><br />
 
-        <button *ngIf="!userData.friend" class="btn profile-edit-btn">
+        <button
+          *ngIf="!userData.friend && userData._id !== loggedInUser"
+          class="btn profile-edit-btn"
+          (click)="removeFriend()"
+        >
           Remove Friend
         </button>
         <button *ngIf="userData.friend" class="btn profile-edit-btn">
           Add Friend
         </button>
-        <button *ngIf="userData.userHimself" class="btn profile-edit-btn">
+        <button *ngIf="userData.userHimself" (click)="addPost()" class="btn profile-edit-btn">
           Add Post
         </button>
         <button class="btn profile-settings-btn" aria-label="profile settings">
@@ -31,7 +35,9 @@
       <div class="profile-stats">
         <ul>
           <li>
-            <span class="profile-stat-count">{{ userData?.posts?.length }}</span>
+            <span class="profile-stat-count">{{
+              userData?.posts?.length
+            }}</span>
             posts
           </li>
           <li><span class="profile-stat-count">188</span> friends</li>
@@ -45,9 +51,9 @@
         </p>
       </div>
     </div>
-    <!-- End of profile section -->
+    
   </div>
-  <!-- End of container -->
+  
 </header>
 
 <main>

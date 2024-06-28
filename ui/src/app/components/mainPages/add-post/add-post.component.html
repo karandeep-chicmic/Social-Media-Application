@@ -1,0 +1,42 @@
+<app-navbar></app-navbar>
+<div class="container">
+  <h1 class="mt-4">Add Post for User</h1>
+  <form class="card mt-4 p-4" [formGroup]="form">
+    <div class="form-group">
+      <div class="image-preview mb-3" *ngIf="imagePreview">
+        <img
+          [src]="imagePreview"
+          alt="Image Preview"
+          class="img-fluid rounded"
+        />
+      </div>
+      <input
+        class="form-control-file"
+        formControlName="file"
+        type="file"
+        (change)="onFileChange($event)"
+        placeholder="This is the image for your Posts !!"
+      />
+    </div>
+    <div class="form-group">
+      <textarea
+        class="form-control"
+        formControlName="caption"
+        type="text"
+        placeholder="This is the caption for your Posts !!"
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="tag users" (input)="searchUser($event)" />
+      <button class="btn btn-dark mt-2 mb-3 usersAdd">add user</button>
+    </div>
+    <div class="form-group" *ngFor="let data of searchedUsers">
+      <span class="badge badge-pill badge-primary">{{ data?.username }}</span>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button class="btn btn-primary btn-block">Add Post</button>
+      </div>
+    </div>
+  </form>
+</div>

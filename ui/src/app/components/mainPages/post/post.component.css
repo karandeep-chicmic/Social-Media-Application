@@ -38,6 +38,8 @@ a{
 
 .card-text {
   margin-bottom: 5px;
+  border: none;
+  outline: none; 
 }
 
 .text-muted {
@@ -87,7 +89,7 @@ a{
   border-radius: 10px; 
   padding: 10px;
   margin-bottom: 15px;
-  background-color: #e3d5d5;
+  background-color: #e3e3e3;
 }
 
 .likes-comment .card-text {
@@ -125,3 +127,41 @@ a{
   margin-left: 10px; 
   font-weight: bold;
 }
+.comments{
+  width: 100%;
+  display: flex;
+}
+
+.comment-user{
+  display: flex;
+  font-size: small;
+  margin-bottom: 10px;
+}
+.comment-picture{
+  width: 25px;
+  height: 25px;
+  /* margin-top: 3px; */
+  margin-bottom: 5px;
+  margin-right: 10px;
+  border-radius: 100%;
+}
+
+.load-more-comments-span{
+  font-size: small;
+}
+.load-more-comments{
+  display: flex;
+  justify-content: end;
+}
+.unliked{
+  font-size: 30px;
+}
+
+
+
+
+
+
+
+
+

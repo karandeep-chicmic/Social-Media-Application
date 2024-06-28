@@ -19,9 +19,13 @@
       <li class="nav-item active">
         <a class="nav-link" [routerLink]="['/user', userId]">myProfile </a>
       </li>
+      
     </ul>
     <div class="logout">
       <button class="btn btn-dark" (click)="logoutUser()">Logout</button>
+    </div>
+    <div class="settings ml-2">
+      <button class="btn btn-dark" [routerLink]="['/friendRequests']" >Friend Requests</button>
     </div>
     <div class="settings ml-2">
       <button class="btn btn-dark" [routerLink]="['/settings']" >Settings</button>

@@ -32,6 +32,11 @@ const RESPONSE_MSGS = {
   LIKE_POST: "post liked successfully !!",
   NOT_FRIEND_AND_PRIVATE_ACC:
     "Users are not friends and the account is private !!",
+  NOT_LIKED: "Post is already disliked !!",
+  DISLIKE_POST: "Post successfully Disliked !!",
+  FRIENDS_DELETED: "Friends are Removed !!",
+  NO_FRIEND_REQUESTS: "No Friend requests !!",
+  REQ_ALREADY_PRESENT: "Request Present for user !!",
 };
 
 const BCRYPT = {

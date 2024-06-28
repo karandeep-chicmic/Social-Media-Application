@@ -164,10 +164,91 @@ const tagUsers = async (payload) => {
   }
 };
 
+const { ObjectId } = require("mongoose").Types;
+
 const feedForUser = async (payload) => {
   try {
     const { userId } = payload;
-    const posts = await postsModel.find({}).populate("userUploaded", ["username", "profilePicture"]);
+
+    const posts = await postsModel
+      .aggregate([
+        {
+          $lookup: {
+            from: "likes",
+            let: { postId: "$_id", userId: new ObjectId(userId) },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$postId", "$$postId"] },
+                      { $eq: ["$userLiked", "$$userId"] },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "likedOrNot",
+          },
+        },
+        {
+          $addFields: {
+            liked: { $gt: [{ $size: "$likedOrNot" }, 0] },
+          },
+        },
+        {
+          $project: {
+            likedOrNot: 0,
+          },
+        },
+        {
+          $lookup: {
+            from: "comments",
+            let: { postId: "$_id" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $eq: ["$postId", "$$postId"],
+                  },
+                },
+              },
+              {
+                $lookup: {
+                  from: "users",
+                  let: { userId: "$userId" },
+                  pipeline: [
+                    {
+                      $match: {
+                        $expr: {
+                          $eq: ["$_id", "$$userId"],
+                        },
+                      },
+                    },
+                    {
+                      $project: { username: 1, profilePicture: 1 },
+                    },
+                  ],
+                  as: "userDetails",
+                },
+              },
+              {
+                $project: { userId: 0, postId: 0, createdAt: 0 },
+              },
+              {
+                $limit: 4,
+              },
+            ],
+            as: "comments",
+          },
+        },
+      ])
+      .exec();
+
+    await postsModel.populate(posts, {
+      path: "userUploaded",
+      select: ["username", "profilePicture"],
+    });
 
     const updatedPosts = await Promise.all(
       posts.map(async (data) => {
@@ -196,7 +277,7 @@ const feedForUser = async (payload) => {
 
     return {
       statusCode: 200,
-      data: filteredPosts,
+      data: filteredPosts.slice(0, 4),
     };
   } catch (error) {
     console.log("ERROR IS:", error);

@@ -5,6 +5,7 @@ import { SweetAlertService } from '../../../services/sweet-alert.service';
 import { ROUTES_UI } from '../../../constants';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { NavbarComponent } from '../../home/navbar/navbar.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-page',
@@ -21,8 +22,7 @@ export class UserPageComponent implements OnInit {
 
   userId: string = '';
   loggedInUser: string = '';
-  userData: any = ""
-
+  userData: any = '';
 
   ngOnInit(): void {
     this.activatedRoutes.params.subscribe((data) => {
@@ -36,13 +36,43 @@ export class UserPageComponent implements OnInit {
   getProfileDetails() {
     this.apiCalls.getProfileDetails(this.userId).subscribe({
       next: (data: any) => {
-        this.userData = data.data[0]
+        this.userData = data.data[0];
         console.log(this.userData);
-        
       },
       error: (err: any) => {
         console.log(err);
       },
+    });
+  }
+
+  addPost() {
+    this.router.navigate([ROUTES_UI.ADD_POST], {
+      queryParams: { userId: this.userId },
+    });
+  }
+
+  removeFriend() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You want to unfriend ${this.userData.name}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.apiCalls.removeFriends(this.userData._id).subscribe({
+          next: (data: any) => {
+            console.log(data);
+            this.sweetAlert.success('Friend Removed Successfully');
+            this.router.navigate([ROUTES_UI.FEED]);
+          },
+          error: (err: any) => {
+            this.sweetAlert.error(err.message);
+          },
+        });
+      }
     });
   }
 }

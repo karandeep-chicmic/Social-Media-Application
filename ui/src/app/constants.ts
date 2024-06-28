@@ -8,6 +8,8 @@ export const ROUTES_UI = {
   USER_POSTS_PAGE: 'user/:id',
   USER: 'user',
   SETTINGS: 'settings',
+  FRIEND_REQUESTS: 'friendRequests',
+  ADD_POST: "addPosts",
   WILDCARD_ROUTE: '**',
 };
 
@@ -24,5 +26,12 @@ export const API_ROUTES = {
   FEED: '/feedForUser',
   CHECK_FRIENDS: '/friendsOrNot',
   PROFILE_DETAILS: '/user',
-  USER_DETAILS: "/userDetails"
+  USER_DETAILS: '/userDetails',
+  LIKE_A_POST: '/likes',
+  DISLIKE_A_POST: '/dislike',
+  REMOVE_FRIEND: '/deleteFriend',
+  SEARCH_USERS: '/searchUsers',
+  FRIEND_REQUESTS: '/getFriendRequests',
+  ACCEPT_FRIEND_REQUESTS: '/acceptRequest',
+  SEND_REQUEST: "/sendRequest"
 };
