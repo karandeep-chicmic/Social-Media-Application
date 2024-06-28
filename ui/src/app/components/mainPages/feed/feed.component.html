@@ -1,12 +1,16 @@
 <app-navbar></app-navbar>
 <div class="search-container">
   <form class="search-form">
-    <input type="text" class="search-input" placeholder="Search" />
-    <button type="submit" class="search-button">Search</button>
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search"
+      (input)="searchUser($event)"
+    />
   </form>
 </div>
 
-<div class="container mt-4">
+<div class="container mt-4" *ngIf="showFeed">
   <div class="card">
     <div class="card-header">
       <h3>User Feed</h3>
@@ -15,4 +19,13 @@
       <app-post *ngFor="let post of postsData" [post]="post"></app-post>
     </div>
   </div>
+</div>
+
+<div class="container mt-4" *ngIf="!showFeed">
+  <h1>All Searched users</h1>
+  <div class="card mb-4"></div>
+  <div class="mb-4">
+   <span >Users for Searched text are as below: </span> <b> {{ searchedText }}</b>
+  </div>
+  <app-searched-user class="mb-4" [searchedUser]="searchedText"></app-searched-user>
 </div>

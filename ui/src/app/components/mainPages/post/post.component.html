@@ -1,7 +1,10 @@
 <div class="card mb-3">
   <div class="head" (click)="navigateToUserPage(post.userUploaded._id)">
-    <img class="user-head-image" [src]="'http://localhost:3400/' + post.userUploaded.profilePicture" >
-    <span class="user-head-username">{{post.userUploaded.username}}</span>
+    <img
+      class="user-head-image"
+      [src]="'http://localhost:3400/' + post.userUploaded.profilePicture"
+    />
+    <span class="user-head-username">{{ post.userUploaded.username }}</span>
   </div>
   <img
     [src]="'http://localhost:3400/' + post.imageOrVideo"
@@ -10,21 +13,47 @@
   />
   <div class="card-header">
     <h5>{{ post.caption }}</h5>
+    <p class="card-text" *ngIf="post.taggedPeople.length > 0">
+      👥
+      <button class="btn btn-light" *ngFor="let person of post.taggedPeople">
+        {{ person.username }}
+      </button>
+    </p>
   </div>
   <div class="card-body">
     <h6 class="mb-3">Liked by {{ post.likes }} people..</h6>
     <div class="likes-comment">
-      <button class="card-text btn"><span class="icon">❤️</span></button>
-      <button class="card-text btn"><span class="icon">💬</span></button>
-      <button class="card-text btn">
-        <span class="share">▶</span>
+      <button
+        class="card-text btn"
+        (click)="likeOrUnlike(true)"
+        *ngIf="post.liked"
+      >
+        <span class="icon">❤️</span>
+      </button>
+      <button
+        class="card-text btn"
+        (click)="likeOrUnlike(false)"
+        *ngIf="!post.liked"
+      >
+        <span class="icon unliked">♡</span>
+      </button>
+      <button class="card-text btn" (click)="openComments()"><span class="icon">💬</span></button>
+      <button  class="card-text btn" (click)="shareTo()">
+        <span class="share" >▶</span>
       </button>
     </div>
+    <div *ngIf="post?.comments?.length>0" class="card comments">
+      <span>Comments:</span><br />
+      <div class="comments" *ngFor="let comment of post.comments">
+        
+        <img [src]="'http://localhost:3400/' + comment.userDetails[0].profilePicture" class="comment-picture" > 
+        <span class="comment-user">{{ comment.userDetails[0].username }} : {{comment.comment}}</span>
+      </div>
+      <div class="load-more-comments">
+        <span class="load-more-comments-span" (click)="openComments()">... load more comments</span>
+      </div>
+    </div>
 
-    <p class="card-text" *ngIf="post.taggedPeople.length > 0">
-      Tagged People:
-      <span *ngFor="let person of post.taggedPeople">{{ person.name }} </span>
-    </p>
     <p class="card-text">
       <small class="text-muted"
         >Posted on: {{ post.createdAt | date : "short" }}</small
@@ -32,3 +61,5 @@
     </p>
   </div>
 </div>
+
+

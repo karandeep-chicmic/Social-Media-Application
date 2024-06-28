@@ -4,6 +4,7 @@ const {
   registerUser,
   getUserDetails,
   getOwnDetails,
+  searchUsersOnSearchText
 } = require("../controllers/userController");
 
 const userRoutes = [
@@ -55,6 +56,18 @@ const userRoutes = [
     auth: true,
     file: false,
     controller: getOwnDetails,
+  },
+  {
+    method: "GET",
+    path: "/searchUsers/:searchText",
+    schema: {
+      params: {
+        searchText: Joi.string().required(),
+      },
+    },
+    auth: true,
+    file: false,
+    controller: searchUsersOnSearchText,
   },
 ];
 

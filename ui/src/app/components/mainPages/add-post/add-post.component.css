@@ -1,0 +1,58 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .image-preview {
+    text-align: center;
+  }
+  
+  .image-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .form-control-file {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .form-control {
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .badge {
+    margin-right: 5px;
+  }
+  
+  .btn {
+    border-radius: 8px;
+  }
+  
+  .btn-primary {
+    background-color: #3897f0;
+    border: none;
+  }
+  
+  .btn-secondary {
+    background-color: #e0e0e0;
+    border: none;
+  }
+  
+  .btn-block {
+    width: 100%;
+  }
+  
+  .usersAdd{
+    display: block;
+    margin-left: 81%;
+  }

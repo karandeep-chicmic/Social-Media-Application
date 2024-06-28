@@ -5,6 +5,8 @@ const { postsModel } = require("../models/postsModel");
 const likeAPost = async (payload) => {
   try {
     const { postId, userId } = payload;
+
+    console.log(postId);
     const like = await likesModel.findOne({
       postId: postId,
       userLiked: userId,
@@ -15,8 +17,8 @@ const likeAPost = async (payload) => {
     }
 
     const liked = await likesModel.create({
-      postId: postId,
       userLiked: userId,
+      postId: postId,
     });
     const increaseLike = await postsModel.updateOne(
       {
@@ -37,4 +39,31 @@ const likeAPost = async (payload) => {
   }
 };
 
-module.exports = { likeAPost };
+const dislikeAPost = async (payload) => {
+  const { postId, userId } = payload;
+  const dislike = await likesModel.findOneAndDelete({
+    postId: postId,
+    userLiked: userId,
+  });
+
+  const decreaseLike = await postsModel.updateOne(
+    {
+      _id: postId,
+    },
+    {
+      $inc: { likes: -1 },
+    }
+  );
+  
+  if (!dislike || !decreaseLike) {
+    return { statusCode: 400, data: RESPONSE_MSGS.NOT_LIKED };
+  }
+
+
+  return {
+    statusCode: 200,
+    data: RESPONSE_MSGS.DISLIKE_POST,
+  };
+};
+
+module.exports = { likeAPost, dislikeAPost };

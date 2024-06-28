@@ -119,7 +119,6 @@ const getUserDetails = async (payload) => {
         pipeline: [
           { $match: { $expr: { $eq: ["$userUploaded", "$$userId"] } } },
           { $sort: { createdAt: -1 } },
-
           // in future can add paging
           { $limit: 5 },
         ],
@@ -209,4 +208,112 @@ const getOwnDetails = async (payload) => {
     },
   };
 };
-module.exports = { loginUser, registerUser, getUserDetails, getOwnDetails };
+
+const searchUsersOnSearchText = async (payload) => {
+  const { userId, searchText } = payload;
+
+  const users = await userModel.aggregate([
+    {
+      $match: {
+        $and: [
+          {
+            $or: [
+              { username: { $regex: searchText, $options: "i" } },
+              { name: { $regex: searchText, $options: "i" } },
+              { email: { $regex: searchText, $options: "i" } },
+            ],
+          },
+          {
+            _id: { $ne: new ObjectId(userId) },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "friends",
+        let: { selfId: "$_id", friendId: new ObjectId(userId) },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $or: [
+                  {
+                    $and: [
+                      { $eq: ["$user", "$$selfId"] },
+                      { $eq: ["$friend", "$$friendId"] },
+                    ],
+                  },
+                  {
+                    $and: [
+                      { $eq: ["$user", "$$friendId"] },
+                      { $eq: ["$friend", "$$selfId"] },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        as: "friends",
+      },
+    },
+    {
+      $unwind: {
+        path: "$friends",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
+    {
+      $addFields: {
+        isFriend: {
+          $cond: {
+            if: { $eq: [true, "$friends.reqAccepted"] },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+    {
+      $addFields: {
+        reqSent: {
+          $cond: {
+            if: { $eq: [false, "$friends.reqAccepted"] },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        friends: 0,
+        password: 0,
+        email: 0,
+        privacy: 0,
+        isVerified: 0,
+        createdAt: 0,
+        updatedAt: 0,
+      },
+    },
+    {
+      $limit: 8,
+    },
+  ]);
+
+  return {
+    statusCode: 200,
+    data: {
+      message: RESPONSE_MSGS.SUCCESS,
+      data: users,
+    },
+  };
+};
+module.exports = {
+  loginUser,
+  registerUser,
+  getUserDetails,
+  getOwnDetails,
+  searchUsersOnSearchText,
+};
