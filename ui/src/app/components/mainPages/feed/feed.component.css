@@ -1,6 +1,6 @@
-.container{
-    display: flex;
-    flex-direction: column;
+.container {
+  display: flex;
+  flex-direction: column;
 }
 
 .search-container,
@@ -48,7 +48,7 @@
   right: 20px;
   width: 90px;
   height: 90px;
-  background-color: #c6c6c6; 
+  background-color: #c6c6c6;
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -58,10 +58,15 @@
 }
 
 .chat-icon img {
-  width: 70%; 
-  height: 70%; 
+  width: 70%;
+  height: 70%;
 }
 
 .chat-icon:hover {
-  background-color: #ffff; 
+  background-color: #ffff;
+}
+
+.main-container {
+  overflow: auto;
+  height: 800px;
 }

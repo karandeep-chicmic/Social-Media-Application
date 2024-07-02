@@ -1,104 +1,118 @@
 <app-navbar></app-navbar>
-<header>
-  <div class="container">
-    <div class="profile">
-      <div class="profile-image">
-        <img
-          class="profile-image-img"
-          [src]="'http://localhost:3400/' + userData.profilePicture"
-          alt=""
-        />
-      </div>
+<div class="main-container">
+  <header>
+    <div class="container">
+      <div class="profile">
+        <div class="profile-image">
+          <img
+            class="profile-image-img"
+            [src]="'http://localhost:3400/' + userData.profilePicture"
+            alt=""
+          />
+        </div>
 
-      <div class="profile-user-settings">
-        <h3 class="profile-user-name">{{ userData.username }}</h3>
-        <br /><br />
+        <div class="profile-user-settings">
+          <h3 class="profile-user-name">{{ userData.username }}</h3>
+          <br /><br />
 
-        <button
-          *ngIf="
-            !userData.friend && userData._id !== loggedInUser && !privatePage
-          "
-          class="btn profile-edit-btn"
-          (click)="removeFriend()"
-        >
-          Remove Friend
-        </button>
-        <button *ngIf="privatePage" class="btn profile-edit-btn" (click)="addFriend()">
-          Add Friend
-        </button>
-        <button *ngIf="userData.friend" class="btn profile-edit-btn">
-          Add Friend
-        </button>
-        <button
-          *ngIf="userData.userHimself"
-          (click)="addPost()"
-          class="btn profile-edit-btn"
-        >
-          Add Post
-        </button>
-        <button class="btn profile-settings-btn" aria-label="profile settings">
-          <i class="fas fa-cog" aria-hidden="true"></i>
-        </button>
-      </div>
+          <button
+            *ngIf="
+              !userData.friend && userData._id !== loggedInUser && !privatePage
+            "
+            class="btn profile-edit-btn"
+            (click)="removeFriend()"
+          >
+            Remove Friend
+          </button>
+          <button
+            *ngIf="privatePage"
+            class="btn profile-edit-btn"
+            (click)="addFriend()"
+          >
+            Add Friend
+          </button>
+          <button *ngIf="userData.friend" class="btn profile-edit-btn">
+            Add Friend
+          </button>
+          <button
+            *ngIf="userData.userHimself"
+            (click)="addPost()"
+            class="btn profile-edit-btn"
+          >
+            Add Post
+          </button>
+          <button
+            class="btn profile-settings-btn"
+            aria-label="profile settings"
+          >
+            <i class="fas fa-cog" aria-hidden="true"></i>
+          </button>
+        </div>
 
-      <div class="profile-stats">
-        <ul>
-          <li>
-            <span class="profile-stat-count">{{
-              userData?.posts?.length
-            }}</span>
-            posts
-          </li>
-          <li><span class="profile-stat-count">188</span> friends</li>
-        </ul>
-      </div>
-
-      <div class="profile-bio">
-        <p>
-          <span class="profile-real-name">{{ userData.name }}</span
-          >{{ userData.bio }} 📷✈️🏕️
-        </p>
-      </div>
-    </div>
-  </div>
-</header>
-
-<main>
-  <div class="container">
-    <div class="gallery">
-      <div
-        class="gallery-item"
-        *ngFor="let item of userData.posts"
-        tabindex="0"
-      >
-        <img
-          [src]="'http://localhost:3400/' + item.imageOrVideo"
-          class="gallery-image"
-          alt=""
-        />
-
-        <div class="gallery-item-info">
+        <div class="profile-stats">
           <ul>
-            <li class="gallery-item-likes">
-              <span class="visually-hidden">Likes:</span
-              ><i class="fas fa-heart" aria-hidden="true"></i> {{ item.likes }}
+            <li>
+              <span class="profile-stat-count">{{
+                userData?.posts?.length
+              }}</span>
+              posts
             </li>
-            <li class="gallery-item-comments">
-              <span class="visually-hidden">Comments:</span
-              ><i class="fas fa-comment" aria-hidden="true"></i> 2
-            </li>
+            <li><span class="profile-stat-count">188</span> friends</li>
           </ul>
+        </div>
+
+        <div class="profile-bio">
+          <p>
+            <span class="profile-real-name">{{ userData.name }}</span
+            >{{ userData.bio }} 📷✈️🏕️
+          </p>
         </div>
       </div>
     </div>
-    <!-- End of gallery -->
-  </div>
-  <!-- End of container -->
+  </header>
 
-  <div class="container" *ngIf="userData?.posts?.length === 0">
-    <h1>No Posts Found !!!</h1>
+  <main>
+    <div class="container">
+      <div class="gallery">
+        <div
+          class="gallery-item"
+          *ngFor="let item of userData.posts"
+          tabindex="0"
+        >
+          <img
+            [src]="'http://localhost:3400/' + item.imageOrVideo"
+            class="gallery-image"
+            alt=""
+          />
+
+          <div class="gallery-item-info">
+            <ul>
+              <li class="gallery-item-likes">
+                <span class="visually-hidden">Likes:</span
+                ><i class="fas fa-heart" aria-hidden="true"></i>
+                {{ item.likes }}
+              </li>
+              <li class="gallery-item-comments">
+                <span class="visually-hidden">Comments:</span
+                ><i class="fas fa-comment" aria-hidden="true"></i> 2
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- End of gallery -->
+    </div>
+    <!-- End of container -->
+
+    <div class="container" *ngIf="userData?.posts?.length === 0">
+      <h1>No Posts Found !!!</h1>
+    </div>
+    <div class="container" *ngIf="privatePage">
+      <h1>Private Page can't be seen</h1>
+    </div>
+  </main>
+
+  <div class="mb-4 load-more">
+    <button class="btn">...Load More Posts</button>
   </div>
-  <div class="container" *ngIf="privatePage">
-    <h1>Private Page can't be seen</h1>
-  </div>
-</main>
+</div>

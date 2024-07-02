@@ -1,36 +1,33 @@
-<div class="container">
-  
-  <div class="card">
-    <div class="card-header">
-      <h4 class="card-title">Users</h4>
-      <div *ngFor="let user of usersData">
-        <div class="card-body" (click)="navigateToUserPage(user._id)">
-          <div class="">
-            <img
-              class="image"
-              [src]="'http://localhost:3400/' + user.profilePicture"
-            />
-            <b>{{ user.username }}</b>
-          </div>
-          <div class="">
-            <span *ngIf="user.isFriend"> you both are friends </span>
-            <button
-              class="btn btn-dark"
-              *ngIf="!user.reqSent && !user.isFriend"
-              (click)="sendRequest(user._id)"
-            >
-              Send Req
-            </button>
-            <button *ngIf="user.reqSent" class="btn btn-success">
-              Accept Request
-            </button>
+<div class="main-container">
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Users</h4>
+        <div *ngFor="let user of usersData">
+          <div class="card-body">
+            <div class="" (click)="navigateToUserPage(user._id)">
+              <img
+                class="image"
+                [src]="'http://localhost:3400/' + user.profilePicture"
+              />
+              <b>{{ user.username }}</b>
+            </div>
+            <div class="">
+              <span *ngIf="user.isFriend"> you both are friends </span>
+              <button
+                class="btn btn-dark"
+                *ngIf="!user.reqSent && !user.isFriend"
+                (click)="sendRequest(user._id)"
+              >
+                Send Req
+              </button>
+              <button *ngIf="user.reqSent" class="btn btn-success">
+                Accept Request
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- { "_id": "667ac2a150bb8e2e5a9d5cc7", "name": "karan", "username": "kd83838383",
-"role": "user", "profilePicture": "public/file-1719321249415.jpg",
-"coverPicture": "", "__v": 0, "isFriend": false, "reqSent": false } -->

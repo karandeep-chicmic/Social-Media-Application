@@ -1,65 +1,67 @@
 <app-navbar></app-navbar>
-<div class="container">
-  <h1 class="mt-4">Add Post for User</h1>
-  <form class="card mt-4 p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <div class="image-preview mb-3" *ngIf="imagePreview">
-        <img
-          [src]="imagePreview"
-          alt="Image Preview"
-          class="img-fluid rounded"
+<div class="main-container">
+  <div class="container">
+    <h1 class="mt-4">Add Post for User</h1>
+    <form class="card mt-4 p-4" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <div class="image-preview mb-3" *ngIf="imagePreview">
+          <img
+            [src]="imagePreview"
+            alt="Image Preview"
+            class="img-fluid rounded"
+          />
+        </div>
+        <input
+          class="form-control-file"
+          formControlName="file"
+          type="file"
+          (change)="onFileChange($event)"
+          placeholder="This is the image for your Posts !!"
         />
       </div>
-      <input
-        class="form-control-file"
-        formControlName="file"
-        type="file"
-        (change)="onFileChange($event)"
-        placeholder="This is the image for your Posts !!"
-      />
-    </div>
-    <div class="form-group">
-      <textarea
-        class="form-control"
-        formControlName="caption"
-        type="text"
-        placeholder="This is the caption for your Posts !!"
-      ></textarea>
-    </div>
-    <div class="form-group">
-      <input
-        type="text"
-        placeholder="Search..."
-        (input)="onSearchChange($event)"
-        formControlName="searchText"
-        class="search-input form-control"
-      />
-      <div class="search-bar">
-        <ul *ngIf="filteredItems.length > 0" class="dropdown-list">
-          <li
-            *ngFor="let item of filteredItems"
-            class="dropdown-item"
-            (click)="setUsernameToSearch(item)"
-          >
-            {{ item.username }}
-          </li>
-        </ul>
+      <div class="form-group">
+        <textarea
+          class="form-control"
+          formControlName="caption"
+          type="text"
+          placeholder="This is the caption for your Posts !!"
+        ></textarea>
       </div>
-      <button
-        class="btn btn-dark mt-2 mb-3 usersAdd"
-        (click)="addTaggedPeople()"
-        type="button"
-      >
-        add user
-      </button>
-    </div>
-    <div class="form-group" *ngFor="let data of searchedUsers">
-      <span class="badge badge-pill badge-primary">{{ data?.username }}</span>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <button class="btn btn-primary btn-block">Add Post</button>
+      <div class="form-group">
+        <input
+          type="text"
+          placeholder="Search..."
+          (input)="onSearchChange($event)"
+          formControlName="searchText"
+          class="search-input form-control"
+        />
+        <div class="search-bar">
+          <ul *ngIf="filteredItems.length > 0" class="dropdown-list">
+            <li
+              *ngFor="let item of filteredItems"
+              class="dropdown-item"
+              (click)="setUsernameToSearch(item)"
+            >
+              {{ item.username }}
+            </li>
+          </ul>
+        </div>
+        <button
+          class="btn btn-dark mt-2 mb-3 usersAdd"
+          (click)="addTaggedPeople()"
+          type="button"
+        >
+          add user
+        </button>
       </div>
-    </div>
-  </form>
+      <div class="form-group" *ngFor="let data of searchedUsers">
+        <span class="badge badge-pill badge-primary">{{ data?.username }}</span>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <button class="btn btn-primary btn-block">Add Post</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

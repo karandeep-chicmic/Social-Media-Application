@@ -24,8 +24,10 @@ export class ApiCallsService {
       email: email,
     });
   }
-  getFeed() {
-    return this.http.get(API_ROUTES.BASE_URL + API_ROUTES.FEED);
+  getFeed(length: number) {
+    return this.http.get(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.FEED}?length=${length}`
+    );
   }
 
   validateOtp(email: string, otp: number) {
@@ -107,6 +109,12 @@ export class ApiCallsService {
     return this.http.put(
       `${API_ROUTES.BASE_URL}${API_ROUTES.UPDATE_PASSWORD}`,
       { oldPassword: oldPass, newPassword: newPass }
+    );
+  }
+
+  getChat(roomName: string, length: number) {
+    return this.http.get(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.GET_CHAT}?roomName=${roomName}&length=${length}`
     );
   }
 }

@@ -11,6 +11,7 @@ import { Router, RouterModule } from '@angular/router';
 import { SweetAlertService } from '../../../services/sweet-alert.service';
 import { ROUTES_UI } from '../../../constants';
 import { CommonFunctionsAndVarsService } from '../../../services/common-functions-and-vars.service';
+import { SocketEventsService } from '../../../services/socket-events.service';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ export class LoginComponent {
   formBuilder: FormBuilder = inject(FormBuilder);
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
+  sockets: SocketEventsService = inject(SocketEventsService);
   commonFunctions: CommonFunctionsAndVarsService = inject(
     CommonFunctionsAndVarsService
   );
@@ -51,7 +53,11 @@ export class LoginComponent {
 
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userId);
+
+
+        this.sockets.selectedUser.set(`${data.userId}`)
         this.commonFunctions.showNavbar.next(true);
+
         this.router.navigate([ROUTES_UI.FEED]);
       },
       error: (err) => {

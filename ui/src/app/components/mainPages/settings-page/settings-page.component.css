@@ -101,4 +101,8 @@ img {
     font-weight: bold; /* Bold text for status */
     color: #333; /* Text color */
   }
+  .main-container {
+    overflow: auto;
+    height: 800px;
+  }
   

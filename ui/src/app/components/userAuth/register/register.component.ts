@@ -46,10 +46,10 @@ export class RegisterComponent {
       return;
     }
 
-    if (!this.selectedImage) {
-      this.sweetAlert.error('Please upload image before registering the user');
-      return;
-    }
+    // if (!this.selectedImage) {
+    //   this.sweetAlert.error('Please upload image before registering the user');
+    //   return;
+    // }
 
     const formData = new FormData();
     formData.append('name', this.form.get('name')?.value);

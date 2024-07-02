@@ -1,24 +1,24 @@
 <app-navbar></app-navbar>
-
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-10 col-xl-8 mx-auto">
-      <h2 class="h3 mt-4 mb-4 page-title">Settings</h2>
-      <div class="my-4">
-        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
-          <li class="nav-item">
-            <a
-              class="nav-link active"
-              id="home-tab"
-              data-toggle="tab"
-              role="tab"
-              aria-controls="home"
-              aria-selected="false"
-              >Profile</a
-            >
-          </li>
-        </ul>
-        <!-- <form> -->
+<div class="main-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10 col-xl-8 mx-auto">
+        <h2 class="h3 mt-4 mb-4 page-title">Settings</h2>
+        <div class="my-4">
+          <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                id="home-tab"
+                data-toggle="tab"
+                role="tab"
+                aria-controls="home"
+                aria-selected="false"
+                >Profile</a
+              >
+            </li>
+          </ul>
+          <!-- <form> -->
           <div class="row mt-5 align-items-center">
             <div class="col-md-3 text-center mb-5">
               <div class="avatar avatar-xl">
@@ -85,10 +85,13 @@
 
           <hr class="my-4" />
           <div class="row mb-4">
-            <div class="col-md-6"> 
-              <form [formGroup]="updatePasswordForm" (ngSubmit)="updatePassword()">
+            <div class="col-md-6">
+              <form
+                [formGroup]="updatePasswordForm"
+                (ngSubmit)="updatePassword()"
+              >
                 <div class="form-group">
-                  <label for="inputPassword4" >Old Password</label>
+                  <label for="inputPassword4">Old Password</label>
                   <input
                     type="password"
                     class="form-control mt-2 mb-2"
@@ -97,7 +100,7 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label for="inputPassword5" >New Password</label>
+                  <label for="inputPassword5">New Password</label>
                   <input
                     type="password"
                     class="form-control mt-2 mb-2"
@@ -115,7 +118,7 @@
                   />
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">
-                  Update Password 
+                  Update Password
                 </button>
               </form>
             </div>
@@ -133,7 +136,7 @@
               </ul>
             </div>
           </div>
-        
+        </div>
       </div>
     </div>
   </div>

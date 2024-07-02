@@ -340,3 +340,8 @@ button.btn-dark {
 ul{
   list-style-type: none;
 }
+
+.main-container{
+  overflow: auto;
+  height: 800px;
+}

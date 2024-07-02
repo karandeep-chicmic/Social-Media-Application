@@ -18,6 +18,7 @@ const messagesSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
