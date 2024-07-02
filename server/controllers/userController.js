@@ -158,6 +158,7 @@ const getUserDetails = async (payload) => {
         data: {
           data: [
             {
+              _id: user[0]._id,
               username: user[0].username,
               profilePicture: user[0].profilePicture,
             },
@@ -310,10 +311,94 @@ const searchUsersOnSearchText = async (payload) => {
     },
   };
 };
+
+// change account from personal to public or vice versa
+const updatePrivacy = async (payload) => {
+  const { userId } = payload;
+  const getUser = await userModel.findById(userId);
+  if (!getUser) {
+    return {
+      statusCode: 400,
+      data: {
+        message: RESPONSE_MSGS.USER_NOT_EXIST,
+      },
+    };
+  }
+  const { privacy } = getUser;
+  const update = await userModel.findByIdAndUpdate(userId, {
+    $set: {
+      privacy: !privacy,
+    },
+  });
+
+  if (!update) {
+    return {
+      statusCode: 400,
+      data: {
+        message: RESPONSE_MSGS.FAILURE,
+      },
+    };
+  }
+
+  return {
+    statusCode: 200,
+    data: {
+      message: RESPONSE_MSGS.SUCCESS,
+    },
+  };
+};
+
+const updatePassword = async (payload) => {
+  const { userId, oldPassword, newPassword } = payload;
+  const getUser = await userModel.findById(userId);
+  if (!getUser) {
+    return {
+      statusCode: 400,
+      data: {
+        message: RESPONSE_MSGS.USER_NOT_EXIST,
+      },
+    };
+  }
+  passwordMatch = bcrypt.compareSync(oldPassword, getUser.password);
+  if (!passwordMatch) {
+    return {
+      statusCode: 400,
+      data: {
+        message: RESPONSE_MSGS.OLDPASS_DOESNT_MATCH,
+      },
+    };
+  } else {
+    const salt = bcrypt.genSaltSync(BCRYPT.SALT_ROUNDS);
+
+    const update = await userModel.findByIdAndUpdate(userId, {
+      $set: {
+        password: bcrypt.hashSync(newPassword, salt),
+      },
+    });
+
+    if (!update) {
+      return {
+        statusCode: 400,
+        data: {
+          message: RESPONSE_MSGS.FAILURE,
+        },
+      };
+    }
+
+    return {
+      statusCode: 200,
+      data: {
+        message: RESPONSE_MSGS.SUCCESS,
+      },
+    };
+  }
+};
 module.exports = {
   loginUser,
   registerUser,
   getUserDetails,
   getOwnDetails,
   searchUsersOnSearchText,
+  updatePrivacy,
+  updatePassword,
 };

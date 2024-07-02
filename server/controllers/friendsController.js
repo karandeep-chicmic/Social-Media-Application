@@ -176,14 +176,13 @@ const getUserFriends = async (payload) => {
 
   await friendsModel.populate(findUserFriends, {
     path: "user",
-    select: ["username", "profilePicture"],
+    select: ["username", "profilePicture", "name", "email"],
   });
 
   await friendsModel.populate(findUserFriends, {
     path: "friend",
-    select: ["username", "profilePicture"],
+    select: ["username", "profilePicture", "name", "email"],
   });
-  
 
   return {
     statusCode: 200,

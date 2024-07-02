@@ -25,7 +25,22 @@
   <h1>All Searched users</h1>
   <div class="card mb-4"></div>
   <div class="mb-4">
-   <span >Users for Searched text are as below: </span> <b> {{ searchedText }}</b>
+    <span>Users for Searched text are as below: </span>
+    <b> {{ searchedText }}</b>
   </div>
-  <app-searched-user class="mb-4" [searchedUser]="searchedText"></app-searched-user>
+  <app-searched-user
+    class="mb-4"
+    [searchedUser]="searchedText"
+  ></app-searched-user>
+</div>
+
+<div class="">
+  <a [routerLink]="['/messenger']">
+    <div class="chat-icon">
+      <img
+        src="https://cdn-icons-png.freepik.com/512/5962/5962463.png"
+        alt="Chat Icon"
+      />
+    </div>
+  </a>
 </div>

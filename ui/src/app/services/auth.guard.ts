@@ -4,7 +4,7 @@ import { ROUTES_UI } from '../constants';
 
 export const canActivate = () => {
   const router: Router = inject(Router);
-  if (localStorage.getItem('token')) {
+  if (sessionStorage.getItem('token')) {
     return true;
   } else {
     router.navigate(['/login']);
@@ -14,7 +14,7 @@ export const canActivate = () => {
 
 export const canActivateLogin = () => {
   const router: Router = inject(Router);
-  if (!localStorage.getItem('token')) {
+  if (!sessionStorage.getItem('token')) {
     return true;
   } else {
     router.navigate([ROUTES_UI.FEED]);

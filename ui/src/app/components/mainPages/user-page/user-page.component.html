@@ -15,16 +15,25 @@
         <br /><br />
 
         <button
-          *ngIf="!userData.friend && userData._id !== loggedInUser"
+          *ngIf="
+            !userData.friend && userData._id !== loggedInUser && !privatePage
+          "
           class="btn profile-edit-btn"
           (click)="removeFriend()"
         >
           Remove Friend
         </button>
+        <button *ngIf="privatePage" class="btn profile-edit-btn" (click)="addFriend()">
+          Add Friend
+        </button>
         <button *ngIf="userData.friend" class="btn profile-edit-btn">
           Add Friend
         </button>
-        <button *ngIf="userData.userHimself" (click)="addPost()" class="btn profile-edit-btn">
+        <button
+          *ngIf="userData.userHimself"
+          (click)="addPost()"
+          class="btn profile-edit-btn"
+        >
           Add Post
         </button>
         <button class="btn profile-settings-btn" aria-label="profile settings">
@@ -51,9 +60,7 @@
         </p>
       </div>
     </div>
-    
   </div>
-  
 </header>
 
 <main>
@@ -90,5 +97,8 @@
 
   <div class="container" *ngIf="userData?.posts?.length === 0">
     <h1>No Posts Found !!!</h1>
+  </div>
+  <div class="container" *ngIf="privatePage">
+    <h1>Private Page can't be seen</h1>
   </div>
 </main>

@@ -86,5 +86,27 @@ export class ApiCallsService {
       friendReqUserId: friendId,
     });
   }
-  
+  getUserFriends() {
+    return this.http.get(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.GET_USER_FRIENDS}`
+    );
+  }
+
+  addPosts(formDataPost: FormData) {
+    console.log(formDataPost);
+
+    return this.http.post(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.ADD_POSTS}`,
+      formDataPost
+    );
+  }
+  updateThePrivacy() {
+    return this.http.put(`${API_ROUTES.BASE_URL}${API_ROUTES.PRIVACY}`, {});
+  }
+  updatePassword(oldPass: string, newPass: string) {
+    return this.http.put(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.UPDATE_PASSWORD}`,
+      { oldPassword: oldPass, newPassword: newPass }
+    );
+  }
 }
