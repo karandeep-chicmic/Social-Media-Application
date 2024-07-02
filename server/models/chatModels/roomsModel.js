@@ -5,7 +5,6 @@ const roomsSchema = new Schema(
     roomName: {
       type: String,
       required: true,
-      unique: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,6 +14,7 @@ const roomsSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

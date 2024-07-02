@@ -2,7 +2,7 @@
   <div #chatHistory class="chat-history" (scroll)="loadMoreMsgs()">
     <!-- <div class="d-flex justify-content-center mb-2"> -->
     <!-- <button (click)="loadMoreMsgs()" class="load-messages-btn">Load Previous Messages</button> -->
-    <!-- {{ chatMessages | json }} -->
+
     <!-- </div> -->
     <ul *ngFor="let chat of chatMessages">
       <li *ngIf="chat?.sendersId === userLoggedIn" class="clearfix">

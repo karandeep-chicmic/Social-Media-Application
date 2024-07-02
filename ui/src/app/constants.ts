@@ -21,7 +21,6 @@ export const API_ROUTES = {
   ROOM_GET: '/prevChat',
   GET_CHAT: '/messages',
   SEARCH: '/user/search',
-  MESSAGES: '/messages',
   SEND_OTP: '/otp',
   VERIFY_OTP: '/verifyOtp',
   FEED: '/feedForUser',

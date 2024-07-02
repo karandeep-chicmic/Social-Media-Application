@@ -10,7 +10,7 @@ const createRoomName = (senderId, receiverId) => {
 
 const events = async (socket, io) => {
   console.log("New user connected to chat with id : ", socket.id);
-  
+
   // join room by roomName
   socket.on(SOCKET_EVENTS.JOIN_BY_ROOM_NAME, (roomName) => {
     socket.join(roomName);
@@ -25,21 +25,34 @@ const events = async (socket, io) => {
 
     try {
       socket.join(roomName);
-      const data = await roomModel.findOneAndUpdate(
-        { roomName: roomName, user: userId },
-        {
-          $set: {
-            roomName: roomName,
-            user: userId,
+
+      let data = await roomModel.findOne({ roomName: roomName, user: userId });
+
+      if (data) {
+        // Update the existing document if it exists
+        data = await roomModel.findOneAndUpdate(
+          { roomName: roomName, user: userId },
+          {
+            $set: {
+              roomName: roomName,
+              user: userId,
+            },
           },
-        },
-        { upsert: true, new: true }
-      );
+          { new: true }
+        );
+      } else {
+        // Create a new document if it doesn't exist
+        data = await roomModel.create({ roomName: roomName, user: userId });
+      }
 
       callback({ roomId: roomName, data: data });
     } catch (error) {
-      console.error("Error finding users: ", error);
-      callback({ roomId: roomName, data: [], error: "Error finding users" });
+      console.error("Error finding or updating users: ", error);
+      callback({
+        roomId: roomName,
+        data: [],
+        error: "Error finding or updating users",
+      });
     }
   });
 

@@ -198,7 +198,12 @@ img {
     animation: loader 500ms linear infinite;
 }
 
-
+.load-more{
+    display: none;
+    margin: 0 auto;
+    margin-left: 1200px;
+    
+}
 
 
 h2{

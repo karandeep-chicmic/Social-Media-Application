@@ -15,10 +15,12 @@ export class SocketEventsService {
   sweetAlert: SweetAlertService = inject(SweetAlertService);
 
   private socket: Socket;
-  selectedUser = signal('');
   messages: any[] = [];
   subjectToUpdate = new Subject();
-  
+  messagesSubject = new Subject();
+  selectedUser = signal('');
+
+  chatMessages: any[] = [];
 
   constructor() {
     this.socket = io(`${API_ROUTES.BASE_URL}${API_ROUTES.CHAT}`);
@@ -28,7 +30,19 @@ export class SocketEventsService {
 
     this.socket.on(SOCKET_EVENTS.RECEIVE_MESSAGE, (data) => {
       console.log('received message', data);
+      console.log('selectedId', this.selectedUser());
+
+      if (data.sendersId !== this.selectedUser()) {
+        this.sweetAlert.success('message received :' + data.messageContent);
+        this.messagesSubject.next({
+          messageSent: data,
+        });
+      }
     });
+  }
+
+  trigger(data: any) {
+    this.subjectToUpdate.next(data);
   }
 
   sendMsg(sendersId: string, roomId: string, messageContent: string) {
@@ -38,7 +52,8 @@ export class SocketEventsService {
       roomId,
       messageContent,
       (data: any) => {
-        console.log('send message', data);
+        this.messagesSubject.next(data);
+        console.log('from send', data);
       }
     );
   }
@@ -55,10 +70,8 @@ export class SocketEventsService {
     );
   }
 
-  joinGroupRoom(name: string, users: any[]) {
-    users.forEach((id) => {
-      this.socket.emit(SOCKET_EVENTS.GROUP_JOIN, id, name, (data: any) => {});
-    });
+  joinGroupRoom(name: string, user: string) {
+    this.socket.emit(SOCKET_EVENTS.GROUP_JOIN, user, name, (data: any) => {});
   }
 
   joinByGroupName(name: string) {

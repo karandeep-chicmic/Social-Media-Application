@@ -15,6 +15,7 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from '../modal/modal.component';
 import { NavbarComponent } from '../../../home/navbar/navbar.component';
 import { SweetAlertService } from '../../../../services/sweet-alert.service';
+import { CommonFunctionsAndVarsService } from '../../../../services/common-functions-and-vars.service';
 
 @Component({
   selector: 'app-messenger',
@@ -36,6 +37,9 @@ export class MessengerComponent implements OnInit {
   sockets: SocketEventsService = inject(SocketEventsService);
   formBuilder: FormBuilder = inject(FormBuilder);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
+  commonFunc: CommonFunctionsAndVarsService = inject(
+    CommonFunctionsAndVarsService
+  );
 
   //  the data from search as well as the previous chatted users
   dataBySearch: any[] = [];
@@ -66,6 +70,7 @@ export class MessengerComponent implements OnInit {
     this.sockets.subjectToUpdate.subscribe(() => {
       this.setUsers();
     });
+
     this.searchSubject
       .pipe(
         debounceTime(300), // 300ms debounce time
@@ -105,7 +110,13 @@ export class MessengerComponent implements OnInit {
           this.userPicture = this.dataBySearch[0].profilePicture;
 
           this.dataBySearch.forEach((data: any) => {
-            this.sockets.joinRoom(data._id, userId);
+            const roomName: string = this.commonFunc.createRoomName(
+              data._id,
+              userId
+            );
+
+            this.sockets.joinGroupRoom(roomName, data._id);
+            this.sockets.joinGroupRoom(roomName, userId);
           });
         }
       },
@@ -133,7 +144,6 @@ export class MessengerComponent implements OnInit {
   }
 
   createRoomName(senderId: string | undefined, receiverId: string | null) {
-    console.log([senderId, receiverId].sort().join('-'));
     return [senderId, receiverId].sort().join('-');
   }
 

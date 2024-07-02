@@ -67,7 +67,11 @@ const postRoutes = [
   {
     method: "GET",
     path: "/feedForUser",
-    schema: {},
+    schema: {
+      query: {
+        length: Joi.number().required(),
+      },
+    },
     file: false,
     auth: true,
     controller: feedForUser,

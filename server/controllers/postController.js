@@ -171,7 +171,7 @@ const { ObjectId } = require("mongoose").Types;
 
 const feedForUser = async (payload) => {
   try {
-    const { userId } = payload;
+    const { userId, length } = payload;
 
     const posts = await postsModel
       .aggregate([
@@ -246,7 +246,7 @@ const feedForUser = async (payload) => {
           },
         },
         {
-          $sort: { createdAt: 1 },
+          $sort: { createdAt: -1 },
         },
       ])
       .exec();
@@ -283,7 +283,7 @@ const feedForUser = async (payload) => {
 
     return {
       statusCode: 200,
-      data: filteredPosts.slice(0, 4),
+      data: filteredPosts.slice(length, length + 4),
     };
   } catch (error) {
     console.log("ERROR IS:", error);

@@ -1,9 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+NG+Modern:wght@100..400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+NG+Modern:wght@100..400&display=swap");
 
-*{
-    /* margin: 0; */
-    /* font-family: 'Oleo Script', cursive; */
-    font-family: "Playwrite NG Modern", cursive;
-    /* font-optical-sizing: auto; */
+* {
+  /* margin: 0; */
+  /* font-family: 'Oleo Script', cursive; */
+  font-family: "Playwrite NG Modern", cursive;
+  /* font-optical-sizing: auto; */
+}
+
+body {
+  overflow: auto;
+}
+body{
+  overflow: hidden;
+}
+
+.main-container {
+  overflow: auto;
+  height: 800px;
 }

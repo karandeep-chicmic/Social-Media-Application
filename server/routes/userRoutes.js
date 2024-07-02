@@ -34,6 +34,7 @@ const userRoutes = [
         email: Joi.string().email().required(),
         file: Joi.string().optional(),
       },
+      
     },
     auth: false,
     file: true,

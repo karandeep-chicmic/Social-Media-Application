@@ -4,25 +4,27 @@ import { Router } from '@angular/router';
 import { ROUTES_UI } from '../../../constants';
 import { ApiCallsService } from '../../../services/api-calls.service';
 import { SweetAlertService } from '../../../services/sweet-alert.service';
-
+import { ModalComponent } from '../chat-pages/modal/modal.component';
 
 @Component({
   selector: 'app-post',
   standalone: true,
-  imports: [DatePipe, CommonModule],
+  imports: [DatePipe, CommonModule, ModalComponent],
   templateUrl: './post.component.html',
   styleUrl: './post.component.css',
 })
 export class PostComponent {
+  @Input() post: any;
+
   router: Router = inject(Router);
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
-  @Input() post: any;
+  isModalVisible: boolean = false;
+  sharesModal: boolean = false;
 
   navigateToUserPage(id: any) {
     this.router.navigate([ROUTES_UI.USER, id]);
   }
-
 
   likeOrUnlike(flag: boolean) {
     if (flag === true) {
@@ -48,9 +50,10 @@ export class PostComponent {
     }
   }
   openComments() {
-    this.sweetAlert.success('comments open!!');
+    this.isModalVisible = !this.isModalVisible;
   }
+
   shareTo() {
-    this.sweetAlert.success('share To open!!');
+    this.sharesModal = !this.sharesModal
   }
 }
