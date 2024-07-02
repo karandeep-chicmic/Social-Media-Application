@@ -23,12 +23,13 @@ export class UserPageComponent implements OnInit {
   userId: string = '';
   loggedInUser: string = '';
   userData: any = '';
+  privatePage: boolean = false;
 
   ngOnInit(): void {
     this.activatedRoutes.params.subscribe((data) => {
       this.userId = data['id'];
     });
-    this.loggedInUser = localStorage.getItem('userId') ?? '';
+    this.loggedInUser = sessionStorage.getItem('userId') ?? '';
 
     this.getProfileDetails();
   }
@@ -40,7 +41,9 @@ export class UserPageComponent implements OnInit {
         console.log(this.userData);
       },
       error: (err: any) => {
-        console.log(err);
+        this.privatePage = true;
+        this.userData = err.error.data[0];
+        console.log(err.error.data);
       },
     });
   }
@@ -73,6 +76,19 @@ export class UserPageComponent implements OnInit {
           },
         });
       }
+    });
+  }
+
+  addFriend() {
+    this.apiCalls.sendFriendRequest(this.userData._id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.sweetAlert.success('Friend Request Sent Successfully');
+        this.router.navigate([ROUTES_UI.FEED]);
+      },
+      error: (err: any) => {
+        this.sweetAlert.error(err.message);
+      },
     });
   }
 }

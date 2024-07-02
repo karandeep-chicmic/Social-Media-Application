@@ -10,6 +10,7 @@ import { UserPageComponent } from './components/mainPages/user-page/user-page.co
 import { SettingsPageComponent } from './components/mainPages/settings-page/settings-page.component';
 import { FriendRequestsComponent } from './components/mainPages/friend-requests/friend-requests.component';
 import { AddPostComponent } from './components/mainPages/add-post/add-post.component';
+import { MessengerComponent } from './components/mainPages/chat-pages/messenger/messenger.component';
 
 export const routes: Routes = [
   { path: ROUTES_UI.DEFAULT, pathMatch: 'full', redirectTo: ROUTES_UI.LOGIN },
@@ -51,6 +52,11 @@ export const routes: Routes = [
   {
     path: ROUTES_UI.SETTINGS,
     component: SettingsPageComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: ROUTES_UI.MESSENGER,
+    component: MessengerComponent,
     canActivate: [canActivate],
   },
   { path: ROUTES_UI.WILDCARD_ROUTE, component: PageNotFoundComponent },

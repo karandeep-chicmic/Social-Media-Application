@@ -3,6 +3,7 @@ import { NavbarComponent } from '../../home/navbar/navbar.component';
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -10,11 +11,13 @@ import { SweetAlertService } from '../../../services/sweet-alert.service';
 import { CommonModule } from '@angular/common';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ApiCallsService } from '../../../services/api-calls.service';
+import { Router } from '@angular/router';
+import { ROUTES_UI } from '../../../constants';
 
 @Component({
   selector: 'app-add-post',
   standalone: true,
-  imports: [NavbarComponent, ReactiveFormsModule, CommonModule],
+  imports: [NavbarComponent, ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './add-post.component.html',
   styleUrl: './add-post.component.css',
 })
@@ -22,11 +25,17 @@ export class AddPostComponent implements OnInit {
   fb: FormBuilder = inject(FormBuilder);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
   apiCalls: ApiCallsService = inject(ApiCallsService);
+  router: Router = inject(Router);
 
   searchedText: string = '';
   private searchSubject = new Subject<string>();
   imagePreview: string | ArrayBuffer | null = null;
   searchedUsers: any;
+  items: any[] = [];
+  filteredItems: any[] = [];
+  tag: any[] = [];
+  selectedItem: any;
+
   form: FormGroup = this.fb.group({
     caption: [
       '',
@@ -37,17 +46,31 @@ export class AddPostComponent implements OnInit {
       ],
     ],
     file: ['', [Validators.required]],
-    taggedPeople: this.fb.array([]),
+    taggedPeople: [[]],
+    searchText: [''],
   });
 
   ngOnInit(): void {
-    this.searchSubject
-      .pipe(debounceTime(450), distinctUntilChanged())
-      .subscribe((searchText) => {
-        this.searchedText = searchText;
-        console.log(this.searchedText);
-        // this.apiCalls
-      });
+    // this.searchSubject
+    //   .pipe(debounceTime(450), distinctUntilChanged())
+    //   .subscribe((searchText) => {
+    //     this.searchedText = searchText;
+    //     console.log(this.searchedText);
+    //     // this.apiCalls
+    //   }); //Debouncing on search for now no need
+
+    this.apiCalls.getUserFriends().subscribe({
+      next: (res: any) => {
+        this.items = res.data;
+        this.items = this.items.map((data) => {
+          if (String(data.user._id) === sessionStorage.getItem('userId')) {
+            return data.friend;
+          } else {
+            return data.user;
+          }
+        });
+      },
+    });
   }
 
   onSubmit() {
@@ -55,7 +78,27 @@ export class AddPostComponent implements OnInit {
     if (this.form.invalid) {
       this.sweetAlert.error('Please fill all the fields Correctly');
     }
+
+    const formData = new FormData();
+    formData.append('caption', this.form.value?.caption);
+    formData.append('file', this.form.value?.file);
+    formData.append('taggedPeople', JSON.stringify(this.tag));
+
+    this.apiCalls.addPosts(formData).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.sweetAlert.success('Post Added Successfully');
+        this.router.navigate([
+          ROUTES_UI.USER,
+          sessionStorage.getItem('userId') || '',
+        ]);
+      },
+      error: (err) => {
+        console.log('ERROR is: ', err);
+      },
+    });
   }
+
   onFileChange(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -68,8 +111,48 @@ export class AddPostComponent implements OnInit {
     }
   }
 
-  searchUser(event: any) {
-    const searchText = event.target.value;
-    this.searchSubject.next(searchText);
+  // searchUser(event: any) {
+  //   const searchText = event.target.value;
+  //   this.searchSubject.next(searchText);
+  // } //debouncing
+
+  searchTerm: string = '';
+
+  onSearchChange(event: any) {
+    this.searchTerm = event.target.value;
+    const search = this.form.controls['searchText'].value.toLowerCase();
+
+    this.filteredItems = this.items.filter((item) => {
+      if (
+        item.name.includes(search) ||
+        item.email.includes(search) ||
+        item.username.includes(search)
+      ) {
+        return item;
+      }
+    });
+  }
+
+  setUsernameToSearch(item: any) {
+    this.form.controls['searchText'].setValue(item.username);
+
+    this.selectedItem = {
+      searchInput: this.form.controls['searchText'].value,
+      item: item,
+    };
+
+    this.filteredItems = [];
+  }
+
+  addTaggedPeople() {
+    if (
+      this.form.controls['searchText'].value === this.selectedItem.searchInput
+    ) {
+      this.tag.push(this.selectedItem.item);
+      this.sweetAlert.success('User Added to Tagged List');
+      console.log(this.tag);
+    } else {
+      this.sweetAlert.error('Add a Valid User !!');
+    }
   }
 }

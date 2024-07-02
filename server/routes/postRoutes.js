@@ -14,7 +14,8 @@ const postRoutes = [
     schema: {
       body: {
         caption: Joi.string().required(),
-        taggedPeople: Joi.array().optional(),
+        taggedPeople: Joi.string().optional(),
+        file: Joi.string().optional(),
       },
     },
 
@@ -27,7 +28,7 @@ const postRoutes = [
     path: "/getPosts",
     schema: {},
     auth: true,
-    file:false,
+    file: false,
     controller: getPosts,
   },
   {

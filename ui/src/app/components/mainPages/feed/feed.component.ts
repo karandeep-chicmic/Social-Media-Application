@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { SearchedUserComponent } from '../searched-user/searched-user.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-feed',
@@ -22,6 +23,7 @@ import { SearchedUserComponent } from '../searched-user/searched-user.component'
     CommonModule,
     ReactiveFormsModule,
     SearchedUserComponent,
+    RouterModule,
   ],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.css',

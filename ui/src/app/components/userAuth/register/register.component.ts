@@ -60,13 +60,13 @@ export class RegisterComponent {
 
     this.apiCalls.registerUser(formData).subscribe({
       next: (data: any) => {
-        localStorage.setItem('email', data.userDetails.email);
+        sessionStorage.setItem('email', data.userDetails.email);
         this.router.navigate([ROUTES_UI.OTP_TEST]);
       },
       error: (err) => {
         console.log(err);
         if (err.status === 421) {
-          localStorage.setItem('email', err.error.email);
+          sessionStorage.setItem('email', err.error.email);
 
           this.router.navigate([ROUTES_UI.OTP_TEST]);
         }

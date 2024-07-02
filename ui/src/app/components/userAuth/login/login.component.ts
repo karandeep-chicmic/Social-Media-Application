@@ -49,8 +49,8 @@ export class LoginComponent {
       next: (data: any) => {
         console.log(data);
 
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userId', data.userId);
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('userId', data.userId);
         this.commonFunctions.showNavbar.next(true);
         this.router.navigate([ROUTES_UI.FEED]);
       },
@@ -58,7 +58,7 @@ export class LoginComponent {
         console.log(err.status === 421);
 
         if (err.status === 421) {
-          localStorage.setItem('email', err.error.email);
+          sessionStorage.setItem('email', err.error.email);
 
           this.apiCalls.sendOtp(err.error.email).subscribe({
             next: (data) => {

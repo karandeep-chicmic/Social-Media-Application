@@ -7,9 +7,12 @@ const { RESPONSE_MSGS } = require("../utils/constants");
 const createPost = async (payload) => {
   try {
     const { file, caption, taggedPeople, userId } = payload;
+
+    console.log(payload);
+    const tagged = JSON.parse(taggedPeople);
     const post = {
       caption: caption,
-      taggedPeople: taggedPeople || [],
+      taggedPeople: tagged || [],
       userUploaded: userId,
       imageOrVideo: file.path,
     };
@@ -241,6 +244,9 @@ const feedForUser = async (payload) => {
             ],
             as: "comments",
           },
+        },
+        {
+          $sort: { createdAt: 1 },
         },
       ])
       .exec();

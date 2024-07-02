@@ -4,7 +4,9 @@ const {
   registerUser,
   getUserDetails,
   getOwnDetails,
-  searchUsersOnSearchText
+  searchUsersOnSearchText,
+  updatePrivacy,
+  updatePassword
 } = require("../controllers/userController");
 
 const userRoutes = [
@@ -68,6 +70,27 @@ const userRoutes = [
     auth: true,
     file: false,
     controller: searchUsersOnSearchText,
+  },
+  {
+    method: "PUT",
+    path: "/userPrivacy",
+    schema: {},
+    file: false,
+    auth: true,
+    controller: updatePrivacy,
+  },
+  {
+    method: "PUT",
+    path: "/updatePassword",
+    schema: {
+      body: {
+        oldPassword: Joi.string().required(),
+        newPassword: Joi.string().required(),
+      },
+    },
+    file: false,
+    auth: true,
+    controller: updatePassword,
   },
 ];
 

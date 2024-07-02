@@ -37,13 +37,23 @@ const RESPONSE_MSGS = {
   FRIENDS_DELETED: "Friends are Removed !!",
   NO_FRIEND_REQUESTS: "No Friend requests !!",
   REQ_ALREADY_PRESENT: "Request Present for user !!",
+  OLDPASS_DOESNT_MATCH: "Old Password does'nt match !!",
 };
 
 const BCRYPT = {
   SALT_ROUNDS: 10,
 };
 
+const SOCKET_EVENTS={
+  DISCONNECT: "disconnect",
+  JOIN_ROOM: "join-room",
+  SEND_MESSAGE: "send-message",
+  RECEIVE_MESSAGE: "receive-message",
+  GROUP_JOIN:"group-join",
+  JOIN_BY_ROOM_NAME: "join-by-room-name"
+}
+
 const SECRET_KEY =
   "537f5ede884e9d34bb82f7c54c5c7dd0e9fcbe533584fcefe69df5231bd02e453bdbcd264c6bcebfaa31a97553ff3723d87d629a9821a07f82799253edb94a5f";
 
-module.exports = { PORT, RESPONSE_MSGS, BCRYPT, SECRET_KEY };
+module.exports = { PORT, RESPONSE_MSGS, BCRYPT, SECRET_KEY, SOCKET_EVENTS };

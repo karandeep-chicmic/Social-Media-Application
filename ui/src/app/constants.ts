@@ -9,7 +9,8 @@ export const ROUTES_UI = {
   USER: 'user',
   SETTINGS: 'settings',
   FRIEND_REQUESTS: 'friendRequests',
-  ADD_POST: "addPosts",
+  ADD_POST: 'addPosts',
+  MESSENGER: 'messenger',
   WILDCARD_ROUTE: '**',
 };
 
@@ -33,5 +34,20 @@ export const API_ROUTES = {
   SEARCH_USERS: '/searchUsers',
   FRIEND_REQUESTS: '/getFriendRequests',
   ACCEPT_FRIEND_REQUESTS: '/acceptRequest',
-  SEND_REQUEST: "/sendRequest"
+  SEND_REQUEST: '/sendRequest',
+  GET_USER_FRIENDS: '/getUserFriends',
+  ADD_POSTS: '/createPosts',
+  PRIVACY: '/userPrivacy',
+  UPDATE_PASSWORD: '/updatePassword',
+  CHAT: '/chat',
+};
+
+export const SOCKET_EVENTS = {
+  CONNECTION: "connection",
+  DISCONNECT: 'disconnect',
+  JOIN_ROOM: 'join-room',
+  SEND_MESSAGE: 'send-message',
+  RECEIVE_MESSAGE: 'receive-message',
+  GROUP_JOIN: 'group-join',
+  JOIN_BY_ROOM_NAME: 'join-by-room-name',
 };

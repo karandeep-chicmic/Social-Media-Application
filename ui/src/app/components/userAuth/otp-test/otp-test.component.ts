@@ -43,7 +43,7 @@ export class OtpTestComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    const email: string = localStorage.getItem('email') ?? '';
+    const email: string = sessionStorage.getItem('email') ?? '';
     this.apiCalls.sendOtp(email).subscribe({
       next: (res: any) => {
         this.sweetAlert.success('Otp sent successfully to email !!');
@@ -52,8 +52,6 @@ export class OtpTestComponent implements OnInit {
         this.sweetAlert.error('Something went wrong !!');
       },
     });
-
-    
   }
 
   get otpControls() {
@@ -64,13 +62,13 @@ export class OtpTestComponent implements OnInit {
     if (this.otpForm.valid) {
       const otp = this.otpForm.value.otp.join('');
       console.log('OTP Entered:', otp);
-      const email = localStorage.getItem('email') ?? '';
+      const email = sessionStorage.getItem('email') ?? '';
       this.apiCalls.validateOtp(email, Number(otp)).subscribe({
         next: (res: any) => {
           console.log(res);
-          localStorage.setItem('email', res.email);
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('userId', res.userId);
+          sessionStorage.setItem('email', res.email);
+          sessionStorage.setItem('token', res.token);
+          sessionStorage.setItem('userId', res.userId);
 
           this.sweetAlert.success(res.message);
           this.commonFunctions.showNavbar.next(true);

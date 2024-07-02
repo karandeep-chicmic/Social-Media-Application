@@ -24,11 +24,11 @@ export class NavbarComponent implements OnInit {
       this.showNavbarMain = data;
     });
 
-    this.userId = localStorage.getItem('userId') ?? '';
+    this.userId = sessionStorage.getItem('userId') ?? '';
   }
 
   logoutUser() {
-    localStorage.clear();
+    sessionStorage.clear();
     this.router.navigate([ROUTES_UI.LOGIN]);
   }
 }

@@ -9,6 +9,8 @@ import {
 import { ApiCallsService } from '../../../services/api-calls.service';
 import { SweetAlertService } from '../../../services/sweet-alert.service';
 import { CommonModule, JsonPipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { ROUTES_UI } from '../../../constants';
 
 @Component({
   selector: 'app-searched-user',
@@ -20,6 +22,7 @@ import { CommonModule, JsonPipe } from '@angular/common';
 export class SearchedUserComponent implements OnChanges, OnInit {
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
+  router: Router = inject(Router);
 
   @Input() searchedUser: string = '';
   usersData: any;
@@ -30,7 +33,7 @@ export class SearchedUserComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    this.userId = localStorage.getItem('userId') ?? '';
+    this.userId = sessionStorage.getItem('userId') ?? '';
   }
 
   getProfile() {
@@ -58,5 +61,9 @@ export class SearchedUserComponent implements OnChanges, OnInit {
         this.sweetAlert.error('ERROR while Sending friend Request !!');
       },
     });
+  }
+
+  navigateToUserPage(id: any) {
+    this.router.navigate([ROUTES_UI.USER, id]);
   }
 }

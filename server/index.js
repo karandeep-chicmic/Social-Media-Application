@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
 const express = require("express");
-const app = express();
+const http = require("http");
 
+const app = express();
+const server = http.createServer(app);
 
 const { PORT } = require("./utils/constants");
 const startExpressApplication = require("./middlewares/startExpressMiddleware");
 
 mongoose.connect("mongodb://localhost:27017/socialMedia", {});
-
 mongoose.connection.on("connected", () => {
   console.log("MongoDb is successfully Connected!!");
 });
@@ -16,16 +17,12 @@ mongoose.connection.on("error", (err) => {
 });
 
 const startApplication = async () => {
-  await startExpressApplication(app);
+  await startExpressApplication(app, server);
 };
-
-app.get("/", () => {
-  console.log("Hello World");
-});
 
 startApplication()
   .then(() => {
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
   })
