@@ -21,6 +21,8 @@ import { SocketEventsService } from '../../../services/socket-events.service';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+
+  //  all services
   formBuilder: FormBuilder = inject(FormBuilder);
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
@@ -28,7 +30,6 @@ export class LoginComponent {
   commonFunctions: CommonFunctionsAndVarsService = inject(
     CommonFunctionsAndVarsService
   );
-
   router: Router = inject(Router);
 
   form: FormGroup = this.formBuilder.group({
@@ -36,6 +37,7 @@ export class LoginComponent {
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
+  // on submit of login form
   onSubmit() {
     if (this.form.invalid) {
       this.sweetAlert.error('Form is Invalid !!');

@@ -57,7 +57,9 @@
               }}</span>
               posts
             </li>
-            <li><span class="profile-stat-count">188</span> friends</li>
+            <li>
+              <span class="profile-stat-count">{{ totalFriends }}</span> friends
+            </li>
           </ul>
         </div>
 
@@ -79,25 +81,32 @@
           *ngFor="let item of userData.posts"
           tabindex="0"
         >
-          <img
-            [src]="'http://localhost:3400/' + item.imageOrVideo"
-            class="gallery-image"
-            alt=""
-          />
+          <a
+            class="post-anchor"
+            [routerLink]="['/updatePost', item._id]"
+            [queryParams]="{ user: item.userUploaded }"
+          >
+            <img
+              [src]="'http://localhost:3400/' + item.imageOrVideo"
+              class="gallery-image"
+              alt=""
+            />
 
-          <div class="gallery-item-info">
-            <ul>
-              <li class="gallery-item-likes">
-                <span class="visually-hidden">Likes:</span
-                ><i class="fas fa-heart" aria-hidden="true"></i>
-                {{ item.likes }}
-              </li>
-              <li class="gallery-item-comments">
-                <span class="visually-hidden">Comments:</span
-                ><i class="fas fa-comment" aria-hidden="true"></i> 2
-              </li>
-            </ul>
-          </div>
+            <div class="gallery-item-info">
+              <ul>
+                <li class="gallery-item-likes">
+                  <span class="visually-hidden">Likes:</span
+                  ><i class="fas fa-heart" aria-hidden="true"></i>
+                  {{ item.likes }}
+                </li>
+                <li class="gallery-item-comments">
+                  <span class="visually-hidden">Comments:</span
+                  ><i class="fas fa-comment" aria-hidden="true"></i>
+                  {{ item.comments }}
+                </li>
+              </ul>
+            </div>
+          </a>
         </div>
       </div>
       <!-- End of gallery -->

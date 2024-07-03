@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiCallsService } from '../../../services/api-calls.service';
 import { SweetAlertService } from '../../../services/sweet-alert.service';
 import { ROUTES_UI } from '../../../constants';
@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-user-page',
   standalone: true,
-  imports: [CommonModule, JsonPipe, NavbarComponent],
+  imports: [CommonModule, JsonPipe, NavbarComponent, RouterModule],
   templateUrl: './user-page.component.html',
   styleUrl: './user-page.component.css',
 })
@@ -24,6 +24,7 @@ export class UserPageComponent implements OnInit {
   loggedInUser: string = '';
   userData: any = '';
   privatePage: boolean = false;
+  totalFriends: number = 0;
 
   ngOnInit(): void {
     this.activatedRoutes.params.subscribe((data) => {
@@ -32,17 +33,28 @@ export class UserPageComponent implements OnInit {
     this.loggedInUser = sessionStorage.getItem('userId') ?? '';
 
     this.getProfileDetails();
+
+    this.apiCalls.getFriendsLength(this.userId).subscribe({
+      next: (data: any) => {
+        console.log(data);
+
+        this.totalFriends = data.data.length;
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 
   getProfileDetails() {
     this.apiCalls.getProfileDetails(this.userId).subscribe({
       next: (data: any) => {
         this.userData = data.data[0];
-        console.log(this.userData);
+        console.log('userData', this.userData);
       },
       error: (err: any) => {
         this.privatePage = true;
-        this.userData = err.error.data[0];
+        this.userData = err?.error?.data?.[0];
         console.log(err.error.data);
       },
     });

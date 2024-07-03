@@ -193,6 +193,40 @@ const getUserFriends = async (payload) => {
   };
 };
 
+// the above and below api can be merged into one
+
+const getUserFriendsNumber = async (payload) => {
+  const { id } = payload;
+  const findUserFriends = await friendsModel.find({
+    $and: [
+      {
+        $or: [{ user: id }, { friend: id }],
+      },
+      {
+        reqAccepted: true,
+      },
+    ],
+  });
+
+  await friendsModel.populate(findUserFriends, {
+    path: "user",
+    select: ["username", "profilePicture", "name", "email"],
+  });
+
+  await friendsModel.populate(findUserFriends, {
+    path: "friend",
+    select: ["username", "profilePicture", "name", "email"],
+  });
+
+  return {
+    statusCode: 200,
+    data: {
+      message: RESPONSE_MSGS.SUCCESS,
+      data: findUserFriends,
+    },
+  };
+};
+
 module.exports = {
   sendFriendReq,
   acceptFriendReq,
@@ -200,4 +234,5 @@ module.exports = {
   deleteFriend,
   getFriendRequests,
   getUserFriends,
+  getUserFriendsNumber,
 };

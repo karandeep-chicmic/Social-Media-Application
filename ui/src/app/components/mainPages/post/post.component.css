@@ -158,10 +158,36 @@ a{
 }
 
 
+.comments-modal{
+  width: 100%;
+  display: flex;
+}
+
+.comment-picture-modal{
+  width: 25px;
+  height: 25px;
+  /* margin-top: 3px; */
+  margin-bottom: 5px;
+  margin-right: 10px;
+  border-radius: 100%;
+}
+.comment-user-modal{
+  display: flex;
+  font-size: large;
+  margin-bottom: 30px;
+}
 
 
+.comments-head-modal{
+  margin-bottom: 40px;
+}
 
+.comment-form-modal{
+  display: flex;
+  padding: 10px;
+}
 
-
-
-
+.input-modal{
+  width: 50%;
+  margin-right: 20px;
+}

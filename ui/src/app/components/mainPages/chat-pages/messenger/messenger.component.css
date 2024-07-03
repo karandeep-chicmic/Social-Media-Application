@@ -116,7 +116,8 @@ body {
 
 .chat .chat-header .chat-with {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 20px;
+  margin-top: 8px;
 }
 
 .chat .chat-header .chat-num-messages {
@@ -337,11 +338,45 @@ button.btn-dark {
   margin-left: 40px;
   margin-bottom: 60px;
 }
-ul{
+ul {
   list-style-type: none;
 }
 
-.main-container{
+.main-container {
   overflow: auto;
   height: 800px;
+}
+
+.group-btn {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.dropdown-list {
+  /* position: absolute; */
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  z-index: 1000;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-item {
+  padding: 8px;
+  color: #343a40;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+.search-bar {
+  position: relative;
+  width: 300px;
+  display: flex;
 }

@@ -4,6 +4,7 @@ const { messagesRoutes } = require("./messagesRoutes");
 const otpRoutes = require("./otpRoutes");
 const postRoutes = require("./postRoutes");
 const userRoutes = require("./userRoutes");
+const groupRoutes = require("./groupRoutes");
 
 const routes = [
   ...userRoutes,
@@ -12,6 +13,7 @@ const routes = [
   ...friendRoutes,
   ...likesRoute,
   ...messagesRoutes,
+  ...groupRoutes
 ];
 
 module.exports = { routes };

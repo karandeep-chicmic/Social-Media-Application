@@ -5,6 +5,8 @@ const {
   addAComment,
   tagUsers,
   feedForUser,
+  getCommentsOfPost,
+  getUserSinglePost
 } = require("../controllers/postController");
 
 const postRoutes = [
@@ -75,6 +77,33 @@ const postRoutes = [
     file: false,
     auth: true,
     controller: feedForUser,
+  },
+  {
+    method: "GET",
+    path: "/getCommentsOfPost/:postId",
+    schema: {
+      query: {
+        length: Joi.number().required(),
+      },
+      params: {
+        postId: Joi.string().required(),
+      },
+    },
+    file: false,
+    auth: true,
+    controller: getCommentsOfPost,
+  },
+  {
+    method: "GET",
+    path: "/getUserSinglePost/:postId",
+    schema: {
+      params: {
+        postId: Joi.string().required(),
+      },
+    },
+    auth: true,
+    file: false,
+    controller: getUserSinglePost,
   },
 ];
 

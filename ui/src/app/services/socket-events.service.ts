@@ -74,6 +74,26 @@ export class SocketEventsService {
     this.socket.emit(SOCKET_EVENTS.GROUP_JOIN, user, name, (data: any) => {});
   }
 
+  createGroup(usersArray: any[], name: string) {
+    this.apiCalls.createGroup(name).subscribe({
+      next: (res: any) => {
+        usersArray.forEach((data) => {
+          this.socket.emit(
+            SOCKET_EVENTS.GROUP_JOIN,
+            data._id,
+            res.data._id,
+            (data: any) => {
+              console.log('from create group', data);
+            }
+          );
+        });
+      },
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
+  }
+
   joinByGroupName(name: string) {
     this.socket.emit(SOCKET_EVENTS.JOIN_BY_ROOM_NAME, name);
   }

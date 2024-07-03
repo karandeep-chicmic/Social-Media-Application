@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
+import { CommonFunctionsAndVarsService } from '../../../../services/common-functions-and-vars.service';
 
 @Component({
   selector: 'app-modal',
@@ -9,8 +10,12 @@ import { Component, Input } from '@angular/core';
 })
 export class ModalComponent {
   @Input() isVisible = false;
+  commonFuncs: CommonFunctionsAndVarsService = inject(
+    CommonFunctionsAndVarsService
+  );
 
   closeModal() {
+    this.commonFuncs.showModal.next(false);
     this.isVisible = false;
   }
 }

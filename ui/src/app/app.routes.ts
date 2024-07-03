@@ -11,6 +11,7 @@ import { SettingsPageComponent } from './components/mainPages/settings-page/sett
 import { FriendRequestsComponent } from './components/mainPages/friend-requests/friend-requests.component';
 import { AddPostComponent } from './components/mainPages/add-post/add-post.component';
 import { MessengerComponent } from './components/mainPages/chat-pages/messenger/messenger.component';
+import { UpdatePostComponent } from './components/mainPages/update-post/update-post.component';
 
 export const routes: Routes = [
   { path: ROUTES_UI.DEFAULT, pathMatch: 'full', redirectTo: ROUTES_UI.LOGIN },
@@ -57,6 +58,11 @@ export const routes: Routes = [
   {
     path: ROUTES_UI.MESSENGER,
     component: MessengerComponent,
+    canActivate: [canActivate],
+  },
+  {
+    path: ROUTES_UI.UPDATE_POST,
+    component: UpdatePostComponent,
     canActivate: [canActivate],
   },
   { path: ROUTES_UI.WILDCARD_ROUTE, component: PageNotFoundComponent },

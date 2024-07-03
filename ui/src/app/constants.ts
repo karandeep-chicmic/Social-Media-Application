@@ -11,6 +11,7 @@ export const ROUTES_UI = {
   FRIEND_REQUESTS: 'friendRequests',
   ADD_POST: 'addPosts',
   MESSENGER: 'messenger',
+  UPDATE_POST: 'updatePost/:postId',
   WILDCARD_ROUTE: '**',
 };
 
@@ -39,10 +40,16 @@ export const API_ROUTES = {
   PRIVACY: '/userPrivacy',
   UPDATE_PASSWORD: '/updatePassword',
   CHAT: '/chat',
+  FRIENDS_LEN: '/friendsAll',
+  ADD_COMMENT: '/addComment',
+  GET_COMMENTS: '/getCommentsOfPost',
+  SINGLE_POST: '/getUserSinglePost',
+  CREATE_GROUP: '/createGroup',
+  GET_GROUPS:"/getUserGroups"
 };
 
 export const SOCKET_EVENTS = {
-  CONNECTION: "connection",
+  CONNECTION: 'connection',
   DISCONNECT: 'disconnect',
   JOIN_ROOM: 'join-room',
   SEND_MESSAGE: 'send-message',
