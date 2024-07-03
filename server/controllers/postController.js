@@ -111,9 +111,23 @@ const addAComment = async (payload) => {
       };
     }
 
+    const findComment = await commentsModel
+      .findById(addTheComment._id)
+      .populate("userId", ["username", "profilePicture"]);
+
+    const updateComment = await postsModel.updateOne(
+      { _id: postId },
+      {
+        $inc: { comments: 1 },
+      }
+    );
+
     return {
       statusCode: 200,
-      data: RESPONSE_MSGS.SUCCESS,
+      data: {
+        message: RESPONSE_MSGS.SUCCESS,
+        data: findComment,
+      },
     };
   } catch (error) {
     console.log("ERROR IS:", error);
@@ -293,6 +307,43 @@ const feedForUser = async (payload) => {
     };
   }
 };
+const getCommentsOfPost = async (payload) => {
+  const { postId, length } = payload;
+
+  const getComments = await commentsModel
+    .find({
+      postId: postId,
+    })
+    .sort({ createdAt: 1 })
+    .skip(length)
+    .limit(5)
+    .populate("userId", ["username", "profilePicture"]);
+
+  return {
+    statusCode: 200,
+    data: getComments,
+  };
+};
+
+const getUserSinglePost = async (payload) => {
+  const { postId } = payload;
+
+  const find = await postsModel
+    .find({ _id: postId })
+    .populate("userUploaded", ["username", "profilePicture"]);
+
+  if (find.length < 1) {
+    return {
+      statusCode: 404,
+      data: RESPONSE_MSGS.POST_NOT_FOUND,
+    };
+  }
+
+  return {
+    statusCode: 200,
+    data: find,
+  };
+};
 
 module.exports = {
   createPost,
@@ -300,4 +351,6 @@ module.exports = {
   addAComment,
   tagUsers,
   feedForUser,
+  getCommentsOfPost,
+  getUserSinglePost,
 };

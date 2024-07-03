@@ -117,4 +117,39 @@ export class ApiCallsService {
       `${API_ROUTES.BASE_URL}${API_ROUTES.GET_CHAT}?roomName=${roomName}&length=${length}`
     );
   }
+
+  getFriendsLength(id: string) {
+    return this.http.get(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.FRIENDS_LEN}/${id}`
+    );
+  }
+
+  addAComment(comment: string, postId: string) {
+    return this.http.post(`${API_ROUTES.BASE_URL}${API_ROUTES.ADD_COMMENT}`, {
+      postId: postId,
+      comment: comment,
+    });
+  }
+
+  getCommentsOfPost(postId: string, length: number) {
+    return this.http.get(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.GET_COMMENTS}/${postId}?length=${length}`
+    );
+  }
+
+  getUserSinglePost(postId: string) {
+    return this.http.get(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.SINGLE_POST}/${postId}`
+    );
+  }
+
+  createGroup(name: string) {
+    return this.http.post(`${API_ROUTES.BASE_URL}${API_ROUTES.CREATE_GROUP}`, {
+      groupName: name,
+    });
+  }
+
+  getUserGroups() {
+    return this.http.get(`${API_ROUTES.BASE_URL}${API_ROUTES.GET_GROUPS}`);
+  }
 }

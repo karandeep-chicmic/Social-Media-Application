@@ -21,6 +21,7 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { SearchedUserComponent } from '../searched-user/searched-user.component';
 import { RouterModule } from '@angular/router';
 import { ModalComponent } from '../chat-pages/modal/modal.component';
+import { CommonFunctionsAndVarsService } from '../../../services/common-functions-and-vars.service';
 
 @Component({
   selector: 'app-feed',
@@ -32,7 +33,7 @@ import { ModalComponent } from '../chat-pages/modal/modal.component';
     ReactiveFormsModule,
     SearchedUserComponent,
     RouterModule,
-    ModalComponent
+    ModalComponent,
   ],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.css',
@@ -40,7 +41,9 @@ import { ModalComponent } from '../chat-pages/modal/modal.component';
 export class FeedComponent implements OnInit, OnDestroy {
   @ViewChild('scrollContainer') scrollContainer: ElementRef;
   apiCalls: ApiCallsService = inject(ApiCallsService);
-
+  commonFuncs: CommonFunctionsAndVarsService = inject(
+    CommonFunctionsAndVarsService
+  );
   fb: FormBuilder = inject(FormBuilder);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
 
@@ -49,13 +52,12 @@ export class FeedComponent implements OnInit, OnDestroy {
   showFeed: boolean = true;
   searchedText: string = '';
   body: any;
-  isModalVisible: boolean = false
+  isModalVisible: boolean = false;
 
   ngOnInit(): void {
     this.getFeed(0);
     this.body = document.getElementById('body-content');
     // this.body.classList.add('test');
-
 
     this.searchSubject
       .pipe(debounceTime(450), distinctUntilChanged())
@@ -63,6 +65,8 @@ export class FeedComponent implements OnInit, OnDestroy {
         this.searchedText = searchText;
         // Debouncing
       });
+
+    
   }
 
   ngOnDestroy(): void {

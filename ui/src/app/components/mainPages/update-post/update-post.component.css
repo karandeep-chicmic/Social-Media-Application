@@ -1,0 +1,188 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview {
+  text-align: center;
+}
+
+.image-preview img {
+  /* max-width: 100%; */
+  /* height: auto; */
+  border-radius: 8px;
+}
+
+.form-control-file {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.badge {
+  margin-right: 5px;
+}
+
+.btn {
+  border-radius: 8px;
+}
+
+.btn-primary {
+  background-color: #3897f0;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: #e0e0e0;
+  border: none;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.usersAdd {
+  display: block;
+  margin-left: 81%;
+}
+
+.search-bar {
+  position: relative;
+  width: 300px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.dropdown-list {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  z-index: 1000;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+.btnTag {
+  margin-left: 10px;
+}
+.container {
+  width: 85%;
+  border: 2px solid rgb(169, 168, 168);
+  margin-top: 10px;
+  margin-bottom: 90px;
+}
+
+.image-post {
+  width: 90%;
+  height: 500px;
+}
+
+.comments {
+  width: 100%;
+  display: flex;
+}
+
+.comment-user {
+  display: flex;
+  font-size: small;
+  margin-bottom: 10px;
+}
+.comment-picture {
+  width: 25px;
+  height: 25px;
+  /* margin-top: 3px; */
+  margin-bottom: 5px;
+  margin-right: 10px;
+  border-radius: 100%;
+}
+
+.load-more-comments-span {
+  font-size: small;
+}
+.load-more-comments {
+  display: flex;
+  justify-content: end;
+}
+.unliked {
+  font-size: 30px;
+}
+
+.comments-modal {
+  width: 100%;
+  display: flex;
+}
+
+.comment-picture-modal {
+  width: 25px;
+  height: 25px;
+  /* margin-top: 3px; */
+  margin-bottom: 5px;
+  margin-right: 10px;
+  border-radius: 100%;
+}
+.comment-user-modal {
+  display: flex;
+  font-size: small;
+  margin-bottom: 30px;
+}
+
+.comments-head-modal {
+  margin-bottom: 40px;
+}
+
+.comment-form-modal {
+  display: flex;
+  padding: 10px;
+}
+
+.input-modal {
+  width: 50%;
+  margin-right: 20px;
+}
+.head {
+  display: flex;
+  /* margin-top: 10px; */
+  margin-left: 10px;
+  margin-bottom: 40px;
+  align-items: center;
+}
+
+.user-head-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+.user-head-username {
+  margin-left: 10px;
+  font-weight: bold;
+}

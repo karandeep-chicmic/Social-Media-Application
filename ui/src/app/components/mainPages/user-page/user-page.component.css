@@ -209,3 +209,8 @@ img {
 h2{
     color: black;
 }
+
+.post-anchor{
+    text-decoration: none;
+    color: antiquewhite;
+}

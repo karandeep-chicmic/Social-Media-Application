@@ -6,6 +6,7 @@ const {
   deleteFriend,
   getFriendRequests,
   getUserFriends,
+  getUserFriendsNumber,
 } = require("../controllers/friendsController");
 const friendRoutes = [
   {
@@ -71,6 +72,18 @@ const friendRoutes = [
     auth: true,
     file: false,
     controller: getUserFriends,
+  },
+  {
+    method: "GET",
+    path: "/friendsAll/:id",
+    schema: {
+      params: {
+        id: Joi.string().required(),
+      },
+    },
+    auth: true,
+    file: false,
+    controller: getUserFriendsNumber,
   },
 ];
 

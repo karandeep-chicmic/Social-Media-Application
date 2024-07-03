@@ -44,22 +44,22 @@ export class MessengerComponent implements OnInit {
   //  the data from search as well as the previous chatted users
   dataBySearch: any[] = [];
   allUsers: any;
-  defaultData: dataBySearch[] = [];
+
   chatData: any;
   selectedId: string | undefined = '';
   userPicture: any;
-  alreadyChatWithUser: any;
+
   username: string | null = 'temp';
-  altImgURl: string = '';
   isModalVisible = false;
-  groupArray: string[] = [];
+  groupArray: any[] = [];
+  groupsBool: boolean = false;
+
   idUser: string = '';
   groupsData: any[] = [];
-  flag: boolean = false;
+  usersToAddToGroup: any[] = [];
 
   form: FormGroup = this.formBuilder.group({
     name: ['', [Validators.required]],
-    addUsers: [''],
   });
 
   private searchSubject = new Subject<string>();
@@ -88,6 +88,8 @@ export class MessengerComponent implements OnInit {
 
   openModal() {
     this.isModalVisible = !this.isModalVisible;
+    this.usersToAddToGroup = [];
+    this.usersToAddToGroup.push({ _id: sessionStorage.getItem('userId') });
   }
 
   setUsers(option?: boolean) {
@@ -103,6 +105,8 @@ export class MessengerComponent implements OnInit {
             return data.user;
           }
         });
+
+        this.allUsers = this.dataBySearch;
 
         if (option) {
           this.chatData = this.dataBySearch[0].name;
@@ -126,6 +130,19 @@ export class MessengerComponent implements OnInit {
     });
   }
 
+  addToGroupArray(item) {
+    const user = this.usersToAddToGroup.find((data) => {
+      if (data._id === item._id) {
+        this.sweetAlert.error('User already added');
+        return true;
+      }
+      return false;
+    });
+
+    if (!user) {
+      this.usersToAddToGroup.push({ username: item.username, _id: item._id });
+    }
+  }
   searchUser(event: any) {
     const searchText = event.target.value;
     if (searchText === '') {
@@ -137,7 +154,7 @@ export class MessengerComponent implements OnInit {
 
   findImage(profileImagePath: string | undefined, err?: string) {}
 
-  getChat(id: string | undefined, name: string, userPicture: string) {
+  getChat(id?: string | undefined, name?: string, userPicture?: string) {
     this.chatData = name;
     this.userPicture = userPicture;
     this.selectedId = id;
@@ -147,13 +164,38 @@ export class MessengerComponent implements OnInit {
     return [senderId, receiverId].sort().join('-');
   }
 
-  async addToGroup() {}
+  showGroups() {
+    this.groupsBool = !this.groupsBool;
+    if (this.groupsBool === true) {
+      this.apiCalls.getUserGroups().subscribe({
+        next: (data: any) => {
+          this.groupArray = data;
+          console.log(
+            'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
+            data[0].roomName
+          );
+
+          this.selectedId = data[0].roomName;
+          this.chatData = data[0].groupName;
+        },
+      });
+    }
+    // this.sockets.getGroupRooms().subscribe((data: any) => {})
+  }
+
+  
   // Image error
   onImageError() {}
 
   selectedEmailForGc(id: string, email: string) {}
 
-  createGroup() {}
+  createGroup() {
+    if (this.form.invalid || this.usersToAddToGroup.length === 0) {
+      this.sweetAlert.error('Group name and users are required !!');
+    }
+
+    this.sockets.createGroup(this.usersToAddToGroup, this.form.value.name);
+  }
 
   addUsersToGroup() {}
 

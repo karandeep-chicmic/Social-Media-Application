@@ -15,9 +15,11 @@
     <h5>{{ post.caption }}</h5>
     <p class="card-text" *ngIf="post.taggedPeople.length > 0">
       👥
-      <button class="btn btn-light" *ngFor="let person of post.taggedPeople">
-        {{ person.username }}
-      </button>
+      <span *ngFor="let person of post.taggedPeople">
+        <a class="btn btn-light" [routerLink]="['/user', person.id]">
+          {{ person.username }}
+        </a>
+      </span>
     </p>
   </div>
   <div class="card-body">
@@ -37,20 +39,30 @@
       >
         <span class="icon unliked">♡</span>
       </button>
-      <button class="card-text btn" (click)="openComments()"><span class="icon">💬</span></button>
-      <button  class="card-text btn" (click)="shareTo()">
-        <span class="share" >▶</span>
+      <button class="card-text btn" (click)="openComments()">
+        <span class="icon">💬</span>
+      </button>
+      <button class="card-text btn" (click)="shareTo()">
+        <span class="share">▶</span>
       </button>
     </div>
-    <div *ngIf="post?.comments?.length>0" class="card comments">
+    <div *ngIf="post?.comments?.length > 0" class="card comments">
       <span>Comments:</span><br />
       <div class="comments" *ngFor="let comment of post.comments">
-        
-        <img [src]="'http://localhost:3400/' + comment.userDetails[0].profilePicture" class="comment-picture" > 
-        <span class="comment-user">{{ comment.userDetails[0].username }} : {{comment.comment}}</span>
+        <img
+          [src]="
+            'http://localhost:3400/' + comment.userDetails[0].profilePicture
+          "
+          class="comment-picture"
+        />
+        <span class="comment-user"
+          >{{ comment.userDetails[0].username }} : {{ comment.comment }}</span
+        >
       </div>
       <div class="load-more-comments">
-        <span class="load-more-comments-span" (click)="openComments()">... load more comments</span>
+        <span class="load-more-comments-span" (click)="openComments()"
+          >... load more comments</span
+        >
       </div>
     </div>
 
@@ -62,14 +74,39 @@
   </div>
 </div>
 
-
-
 <app-modal [isVisible]="isModalVisible">
+  <h4 class="comments-head-modal">Comments</h4>
+  <div class="comments-modal" *ngFor="let comment of allComments">
+    <img
+      [src]="'http://localhost:3400/' + comment.userId.profilePicture"
+      class="comment-picture-modal"
+    />
+    <span class="comment-user-modal"
+      >{{ comment.userId.username }} : {{ comment.comment }}</span
+    >
+  </div>
+  <div class="load-more-comments">
+    <span type="button" class="load-more-comments-span" (click)="getComments()"
+      >...load more comments</span
+    >
+  </div>
 
-  <h4>Comments</h4>
+  <form
+    [formGroup]="form"
+    (ngSubmit)="comment()"
+    class="container comments-input"
+  >
+    <div class="form-group comment-form-modal">
+      <input
+        formControlName="comment"
+        class="form-control input-modal"
+        type="text"
+      />
+      <button type="submit" class="btn btn-dark ml-2">Add Comment</button>
+    </div>
+  </form>
 </app-modal>
 
 <app-modal [isVisible]="sharesModal">
-
   <h4>Share To</h4>
 </app-modal>

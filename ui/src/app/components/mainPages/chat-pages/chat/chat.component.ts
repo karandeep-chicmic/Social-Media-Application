@@ -78,12 +78,17 @@ export class ChatComponent
 
   ngOnChanges(): void {
     this.chatMessages = [];
-    if (this.userLoggedIn && this.selectedId) {
+    console.log(this.groupOrNot);
+
+    if (this.userLoggedIn && this.selectedId && !this.groupOrNot) {
       this.loadPreviousMessages(0);
       this.roomName = this.commonFunctions.createRoomName(
         this.userLoggedIn,
         this.selectedId
       );
+    } else if (this.userLoggedIn && this.selectedId && this.groupOrNot) {
+      this.loadPreviousMessages(0);
+      this.roomName = this.selectedId;
     }
   }
 
@@ -95,12 +100,18 @@ export class ChatComponent
 
   loadPreviousMessages(length: number) {
     this.sockets.messages = [];
-    const getChatRoom = this.commonFunctions.createRoomName(
-      this.selectedId,
-      this.userLoggedIn
-    );
+    let chatRoom: string = '';
 
-    this.apiCalls.getChat(getChatRoom, length).subscribe({
+    if (this.groupOrNot) {
+      chatRoom = this.selectedId;
+    } else {
+      chatRoom = this.commonFunctions.createRoomName(
+        this.selectedId,
+        this.userLoggedIn
+      );
+    }
+
+    this.apiCalls.getChat(chatRoom, length).subscribe({
       next: (data: any) => {
         for (let i = data.data.length - 1; i >= 0; i--) {
           const element = data.data[i];
@@ -108,7 +119,8 @@ export class ChatComponent
         }
       },
       error: (err) => {
-        this.chatMessages = [];
+        // this.chatMessages = [];
+        this.sweetAlert.error('No more Messages !!');
         console.log('ERROR  is : ', err);
       },
     });
