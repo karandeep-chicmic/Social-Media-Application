@@ -6,7 +6,8 @@ const {
   tagUsers,
   feedForUser,
   getCommentsOfPost,
-  getUserSinglePost
+  getUserSinglePost,
+  updatePost
 } = require("../controllers/postController");
 
 const postRoutes = [
@@ -104,6 +105,22 @@ const postRoutes = [
     auth: true,
     file: false,
     controller: getUserSinglePost,
+  },
+  {
+    method: "PUT",
+    path: "/updatePost/:postId",
+    schema: {
+      params: {
+        postId: Joi.string().required(),
+      },
+      body: {
+        caption: Joi.string().required(),
+        file: Joi.string().optional()
+      },
+    },
+    file: true,
+    auth: true,
+    controller: updatePost
   },
 ];
 

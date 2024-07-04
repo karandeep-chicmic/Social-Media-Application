@@ -19,7 +19,6 @@ export class FriendRequestsComponent implements OnInit {
   ngOnInit(): void {
     this.apiCalls.getFriendRequests().subscribe({
       next: (data: any) => {
-        console.log(data);
         this.friendRequests = data.data;
       },
       error: (err) => {
@@ -31,15 +30,13 @@ export class FriendRequestsComponent implements OnInit {
   acceptRequest(id: string) {
     this.apiCalls.acceptFriendRequest(id).subscribe({
       next: (data) => {
-        console.log(data);
-
         this.friendRequests = this.friendRequests.filter((data: any) => {
           return String(data._id) !== String(id);
         });
         this.sweetAlert.success('Friend Request accepted !!');
       },
       error: (err) => {
-        console.log(err);
+        console.log('ERROR is: ', err);
 
         this.sweetAlert.error('Error while accepting Friend request !!');
       },

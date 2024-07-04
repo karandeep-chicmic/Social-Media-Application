@@ -42,6 +42,7 @@
       <div class="form-group" *ngIf="selectedItem?.taggedPeople?.length > 1">
         <h5>Tagged Users</h5>
         <button
+          type="button"
           class="btn btn-primary p-2 mb-5 mt-3 btnTag"
           *ngFor="let item of selectedItem?.taggedPeople"
         >
@@ -81,7 +82,7 @@
       </div> -->
       <div class="row" *ngIf="canUpdateThePost">
         <div class="col-12">
-          <button class="btn btn-primary btn-block">Update Post</button>
+          <button type="submit" class="btn btn-primary btn-block">Update Post</button>
         </div>
       </div>
       <div class="" *ngIf="!canUpdateThePost">

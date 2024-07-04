@@ -78,7 +78,7 @@ export class ChatComponent
 
   ngOnChanges(): void {
     this.chatMessages = [];
-    console.log(this.groupOrNot);
+   
 
     if (this.userLoggedIn && this.selectedId && !this.groupOrNot) {
       this.loadPreviousMessages(0);
@@ -131,7 +131,6 @@ export class ChatComponent
       this.sweetAlert.error('Cant sent empty chat !!');
       return;
     }
-    // console.log(this.roomName, this.userLoggedIn, this.form.value.inputChatMsg);
 
     const msg = this.sockets.sendMsg(
       this.userLoggedIn,

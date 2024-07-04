@@ -21,7 +21,6 @@ import { SocketEventsService } from '../../../services/socket-events.service';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-
   //  all services
   formBuilder: FormBuilder = inject(FormBuilder);
   apiCalls: ApiCallsService = inject(ApiCallsService);
@@ -51,27 +50,21 @@ export class LoginComponent {
 
     this.apiCalls.loginUser(userToLogin).subscribe({
       next: (data: any) => {
-        console.log(data);
-
         sessionStorage.setItem('token', data.token);
         sessionStorage.setItem('userId', data.userId);
 
-
-        this.sockets.selectedUser.set(`${data.userId}`)
+        this.sockets.connectUser();
+        this.sockets.selectedUser.set(`${data.userId}`);
         this.commonFunctions.showNavbar.next(true);
 
         this.router.navigate([ROUTES_UI.FEED]);
       },
       error: (err) => {
-        console.log(err.status === 421);
-
         if (err.status === 421) {
           sessionStorage.setItem('email', err.error.email);
 
           this.apiCalls.sendOtp(err.error.email).subscribe({
             next: (data) => {
-              console.log(data);
-
               this.sweetAlert.success('Otp sent successfully');
               this.router.navigate([ROUTES_UI.OTP_TEST]);
             },

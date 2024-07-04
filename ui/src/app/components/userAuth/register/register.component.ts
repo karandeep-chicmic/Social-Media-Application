@@ -64,7 +64,7 @@ export class RegisterComponent {
         this.router.navigate([ROUTES_UI.OTP_TEST]);
       },
       error: (err) => {
-        console.log(err);
+        console.log("ERROR is:",err);
         if (err.status === 421) {
           sessionStorage.setItem('email', err.error.email);
 

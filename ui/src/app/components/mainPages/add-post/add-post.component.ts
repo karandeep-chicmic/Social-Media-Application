@@ -51,14 +51,6 @@ export class AddPostComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    // this.searchSubject
-    //   .pipe(debounceTime(450), distinctUntilChanged())
-    //   .subscribe((searchText) => {
-    //     this.searchedText = searchText;
-    //     console.log(this.searchedText);
-    //     // this.apiCalls
-    //   }); //Debouncing on search for now no need
-
     this.apiCalls.getUserFriends().subscribe({
       next: (res: any) => {
         this.items = res.data;
@@ -74,7 +66,7 @@ export class AddPostComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.form.value);
+   
     if (this.form.invalid) {
       this.sweetAlert.error('Please fill all the fields Correctly');
     }
@@ -86,7 +78,6 @@ export class AddPostComponent implements OnInit {
 
     this.apiCalls.addPosts(formData).subscribe({
       next: (res: any) => {
-        console.log(res);
         this.sweetAlert.success('Post Added Successfully');
         this.router.navigate([
           ROUTES_UI.USER,
@@ -131,6 +122,10 @@ export class AddPostComponent implements OnInit {
         return item;
       }
     });
+
+    if (this.searchTerm === '') {
+      this.filteredItems = [];
+    }
   }
 
   setUsernameToSearch(item: any) {
@@ -150,7 +145,6 @@ export class AddPostComponent implements OnInit {
     ) {
       this.tag.push(this.selectedItem.item);
       this.sweetAlert.success('User Added to Tagged List');
-      console.log(this.tag);
     } else {
       this.sweetAlert.error('Add a Valid User !!');
     }

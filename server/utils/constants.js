@@ -38,6 +38,9 @@ const RESPONSE_MSGS = {
   NO_FRIEND_REQUESTS: "No Friend requests !!",
   REQ_ALREADY_PRESENT: "Request Present for user !!",
   OLDPASS_DOESNT_MATCH: "Old Password does'nt match !!",
+  JOINED_ALL: "Joined All Users And Groups!!",
+  SOCKET_NOT_ADDED: "Socket Not Added !!",
+  SENT_NOTIFICATION: "Notification Sent Successfully !!"
 };
 
 const BCRYPT = {
@@ -50,7 +53,10 @@ const SOCKET_EVENTS={
   SEND_MESSAGE: "send-message",
   RECEIVE_MESSAGE: "receive-message",
   GROUP_JOIN:"group-join",
-  JOIN_BY_ROOM_NAME: "join-by-room-name"
+  JOIN_BY_ROOM_NAME: "join-by-room-name",
+  JOIN_ROOMS_ALL: "join-all-rooms",
+  SEND_REQ_NOTIFICATION: "send-req-notification"
+  
 }
 
 const SECRET_KEY =

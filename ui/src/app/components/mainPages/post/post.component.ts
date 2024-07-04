@@ -16,7 +16,13 @@ import {
 @Component({
   selector: 'app-post',
   standalone: true,
-  imports: [DatePipe, CommonModule, ModalComponent, ReactiveFormsModule, RouterModule],
+  imports: [
+    DatePipe,
+    CommonModule,
+    ModalComponent,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.css',
 })
@@ -51,7 +57,6 @@ export class PostComponent implements OnInit {
       .getCommentsOfPost(this.post._id, this.allComments.length)
       .subscribe({
         next: (data: any) => {
-          console.log(data);
           data.forEach((element: any) => {
             this.allComments.push(element);
           });
@@ -106,14 +111,21 @@ export class PostComponent implements OnInit {
       .addAComment(this.form.value.comment, this.post._id)
       .subscribe({
         next: (data: any) => {
-          console.log(data.data);
 
           this.allComments.push(data.data);
+          // this.post.comments.push(data.data);
+
           this.form.reset();
         },
         error: (err) => {
           this.sweetAlert.error(err.data);
         },
       });
+  }
+
+  navigateToPostPage() {
+    this.router.navigate([ROUTES_UI.UPDATE_POST_1, this.post._id], {
+      queryParams: { user: this.post.userUploaded },
+    });
   }
 }

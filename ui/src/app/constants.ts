@@ -12,6 +12,7 @@ export const ROUTES_UI = {
   ADD_POST: 'addPosts',
   MESSENGER: 'messenger',
   UPDATE_POST: 'updatePost/:postId',
+  UPDATE_POST_1: 'updatePost',
   WILDCARD_ROUTE: '**',
 };
 
@@ -45,15 +46,20 @@ export const API_ROUTES = {
   GET_COMMENTS: '/getCommentsOfPost',
   SINGLE_POST: '/getUserSinglePost',
   CREATE_GROUP: '/createGroup',
-  GET_GROUPS:"/getUserGroups"
+  GET_GROUPS: '/getUserGroups',
+  UPDATE_POST: '/updatePost',
+  ADD_SOCKET: '/socket',
+  REMOVE_SOCKET: '/removeSocket',
 };
 
 export const SOCKET_EVENTS = {
-  CONNECTION: 'connection',
+  CONNECTION: 'connect',
   DISCONNECT: 'disconnect',
   JOIN_ROOM: 'join-room',
   SEND_MESSAGE: 'send-message',
   RECEIVE_MESSAGE: 'receive-message',
   GROUP_JOIN: 'group-join',
   JOIN_BY_ROOM_NAME: 'join-by-room-name',
+  JOIN_ROOMS_ALL: 'join-all-rooms',
+  SEND_REQ_NOTIFICATION: 'send-req-notification',
 };

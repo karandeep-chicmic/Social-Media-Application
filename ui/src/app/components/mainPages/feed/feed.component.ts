@@ -22,6 +22,7 @@ import { SearchedUserComponent } from '../searched-user/searched-user.component'
 import { RouterModule } from '@angular/router';
 import { ModalComponent } from '../chat-pages/modal/modal.component';
 import { CommonFunctionsAndVarsService } from '../../../services/common-functions-and-vars.service';
+import { SocketEventsService } from '../../../services/socket-events.service';
 
 @Component({
   selector: 'app-feed',
@@ -41,6 +42,7 @@ import { CommonFunctionsAndVarsService } from '../../../services/common-function
 export class FeedComponent implements OnInit, OnDestroy {
   @ViewChild('scrollContainer') scrollContainer: ElementRef;
   apiCalls: ApiCallsService = inject(ApiCallsService);
+  sockets: SocketEventsService = inject(SocketEventsService);
   commonFuncs: CommonFunctionsAndVarsService = inject(
     CommonFunctionsAndVarsService
   );
@@ -66,7 +68,7 @@ export class FeedComponent implements OnInit, OnDestroy {
         // Debouncing
       });
 
-    
+    this.joinSocketsToUsersAndGroups();
   }
 
   ngOnDestroy(): void {
@@ -76,13 +78,12 @@ export class FeedComponent implements OnInit, OnDestroy {
   getFeed(length: number) {
     this.apiCalls.getFeed(length).subscribe({
       next: (data: any) => {
-        console.log(data);
         data.forEach((element: any) => {
           this.postsData.push(element);
         });
       },
       error: (err: any) => {
-        console.log(err);
+        console.log('Error is: ', err);
 
         this.sweetAlert.error(err.message);
       },
@@ -97,6 +98,10 @@ export class FeedComponent implements OnInit, OnDestroy {
       return;
     }
     this.searchSubject.next(searchText);
+  }
+
+  joinSocketsToUsersAndGroups() {
+    this.sockets.joinAllGroupsAndUsers(sessionStorage.getItem('userId') ?? '');
   }
 
   onScroll() {

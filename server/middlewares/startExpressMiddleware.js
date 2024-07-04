@@ -8,6 +8,7 @@ const { routes } = require("../routes");
 const { authorizeUser } = require("./authMiddleware");
 const { Server } = require("socket.io");
 const { events } = require("../events/chatEvents");
+const { socketAuth } = require("./socketAuthMiddleware");
 
 const storage = multer.diskStorage({
   destination: "./public",
@@ -58,6 +59,21 @@ const startExpressApplication = async (app, server) => {
       skipMiddlewares: true,
     },
   });
+
+  // to use middlewares in sockets ?
+  // io.of("/chat").use(socketAuth);
+
+  // io.of("/chat").use((socket, next) => {
+  //   // Middleware logic here
+  //   if (socket.handshake.auth.token) {
+  //     const flag = socketAuth(socket.handshake.auth.token);
+  //     if (flag) {
+  //       next();
+  //     }else{
+  //       console.log();
+  //     }
+  //   }
+  // });
 
   io.of("/chat").on("connection", async (socket) => {
     await events(socket, io);

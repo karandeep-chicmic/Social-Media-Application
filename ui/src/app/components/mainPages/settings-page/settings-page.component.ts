@@ -39,18 +39,17 @@ export class SettingsPageComponent implements OnInit {
         this.userData = data.data;
       },
       error: (err: any) => {
-        console.log(err);
+        console.log('ERROR is:', err);
       },
     });
   }
   onToggle() {
     this.apiCalls.updateThePrivacy().subscribe({
       next: (data: any) => {
-        console.log(data);
         this.userData.privacy = !this.userData.privacy;
       },
       error: (err: any) => {
-        console.log(err);
+        console.log('ERROR is:', err);
       },
     });
   }
@@ -81,7 +80,7 @@ export class SettingsPageComponent implements OnInit {
           this.updatePasswordForm.reset();
         },
         error: (err: any) => {
-          console.log(err);
+          console.log('ERROR is:', err);
           this.sweetAlert.error(err.error.message);
         },
       });

@@ -53,6 +53,14 @@
         >
           add user
         </button>
+        <div class="mb-4">
+          <div class="taggedPeople">
+            <span>Tagged Users: </span>
+            <button class="btn btn-info p-2 mr-2" type="button" *ngFor="let item of tag">
+              {{"@"}}{{ item.username }}
+            </button>
+          </div>
+        </div>
       </div>
       <div class="form-group" *ngFor="let data of searchedUsers">
         <span class="badge badge-pill badge-primary">{{ data?.username }}</span>
