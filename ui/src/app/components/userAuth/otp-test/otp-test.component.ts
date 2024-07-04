@@ -61,11 +61,9 @@ export class OtpTestComponent implements OnInit {
   verifyOtp() {
     if (this.otpForm.valid) {
       const otp = this.otpForm.value.otp.join('');
-      console.log('OTP Entered:', otp);
       const email = sessionStorage.getItem('email') ?? '';
       this.apiCalls.validateOtp(email, Number(otp)).subscribe({
         next: (res: any) => {
-          console.log(res);
           sessionStorage.setItem('email', res.email);
           sessionStorage.setItem('token', res.token);
           sessionStorage.setItem('userId', res.userId);
@@ -75,7 +73,7 @@ export class OtpTestComponent implements OnInit {
           this.router.navigate([ROUTES_UI.FEED]);
         },
         error: (err) => {
-          console.log(err);
+          console.log("ERROR is:",err);
           this.sweetAlert.error(err);
         },
       });

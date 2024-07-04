@@ -78,7 +78,6 @@ export class MessengerComponent implements OnInit {
       )
       .subscribe((searchText) => {
         // this.apiCalls.searchUserInFriends(searchText).subscribe((data: any) => {
-        //   console.log(data);
 
         //   this.dataBySearch = data;
         // });
@@ -95,7 +94,6 @@ export class MessengerComponent implements OnInit {
   setUsers(option?: boolean) {
     this.apiCalls.getUserFriends().subscribe({
       next: (res: any) => {
-        console.log(res);
         const userId: string = sessionStorage.getItem('userId') ?? '';
 
         this.dataBySearch = res.data.map((data: any) => {
@@ -170,20 +168,18 @@ export class MessengerComponent implements OnInit {
       this.apiCalls.getUserGroups().subscribe({
         next: (data: any) => {
           this.groupArray = data;
-          console.log(
-            'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
-            data[0].roomName
-          );
-
           this.selectedId = data[0].roomName;
           this.chatData = data[0].groupName;
         },
       });
+    } else {
+      this.groupArray = [];
+      this.selectedId = this.dataBySearch[0]._id;
+      this.chatData = this.dataBySearch[0].username;
     }
     // this.sockets.getGroupRooms().subscribe((data: any) => {})
   }
 
-  
   // Image error
   onImageError() {}
 
@@ -194,7 +190,11 @@ export class MessengerComponent implements OnInit {
       this.sweetAlert.error('Group name and users are required !!');
     }
 
-    this.sockets.createGroup(this.usersToAddToGroup, this.form.value.name);
+    const res = this.sockets.createGroup(
+      this.usersToAddToGroup,
+      this.form.value.name
+    );
+    this.isModalVisible = !this.isModalVisible;
   }
 
   addUsersToGroup() {}

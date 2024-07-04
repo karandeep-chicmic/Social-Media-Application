@@ -270,6 +270,8 @@ const feedForUser = async (payload) => {
       select: ["username", "profilePicture"],
     });
 
+   
+
     const updatedPosts = await Promise.all(
       posts.map(async (data) => {
         const { userUploaded } = data;
@@ -345,6 +347,35 @@ const getUserSinglePost = async (payload) => {
   };
 };
 
+const updatePost = async (payload) => {
+  const { file, caption, postId, userId } = payload;
+  const findPost = await postsModel.find({ _id: postId, userUploaded: userId });
+
+  if (findPost.length < 1) {
+    return {
+      statusCode: 404,
+      data: RESPONSE_MSGS.POST_NOT_FOUND,
+    };
+  }
+
+  const updatePost = await postsModel.updateOne(
+    { _id: postId },
+    {
+      $set: {
+        caption: caption ? caption : findPost.caption,
+        imageOrVideo: file ? file.path : findPost.imageOrVideo,
+      },
+    }
+  );
+
+  if (updatePost) {
+    return {
+      statusCode: 200,
+      data: RESPONSE_MSGS.SUCCESS,
+    };
+  }
+};
+
 module.exports = {
   createPost,
   getPosts,
@@ -353,4 +384,5 @@ module.exports = {
   feedForUser,
   getCommentsOfPost,
   getUserSinglePost,
+  updatePost,
 };

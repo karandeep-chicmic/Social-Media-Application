@@ -11,6 +11,7 @@ import { SweetAlertService } from '../../../services/sweet-alert.service';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ROUTES_UI } from '../../../constants';
+import { SocketEventsService } from '../../../services/socket-events.service';
 
 @Component({
   selector: 'app-searched-user',
@@ -22,6 +23,7 @@ import { ROUTES_UI } from '../../../constants';
 export class SearchedUserComponent implements OnChanges, OnInit {
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
+  sockets: SocketEventsService = inject(SocketEventsService);
   router: Router = inject(Router);
 
   @Input() searchedUser: string = '';
@@ -39,7 +41,6 @@ export class SearchedUserComponent implements OnChanges, OnInit {
   getProfile() {
     this.apiCalls.getUsersOnSearchInput(this.searchedUser).subscribe({
       next: (res: any) => {
-        console.log(res);
         this.usersData = res.data;
       },
       error: (err) => {},
@@ -49,13 +50,17 @@ export class SearchedUserComponent implements OnChanges, OnInit {
   sendRequest(id: string) {
     this.apiCalls.sendFriendRequest(id).subscribe({
       next: (res: any) => {
-        console.log(res);
         this.sweetAlert.success('Friend Request Sent');
         this.usersData.forEach((element: any) => {
           if (String(element._id) === String(id)) {
             element.reqSent = true;
           }
         });
+        // Emit the notification
+
+        console.log("Emit the notification", id, this.userId);
+        
+        this.sockets.emitFriendReqNotification(id,this.userId);
       },
       error: (err) => {
         this.sweetAlert.error('ERROR while Sending friend Request !!');

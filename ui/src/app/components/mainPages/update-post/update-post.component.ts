@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { NavbarComponent } from '../../home/navbar/navbar.component';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -30,6 +30,7 @@ export class UpdatePostComponent implements OnInit {
   fb: FormBuilder = inject(FormBuilder);
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
+  router: Router = inject(Router);
 
   userSelected: string = '';
   postSelected: string = '';
@@ -41,6 +42,7 @@ export class UpdatePostComponent implements OnInit {
   items: any[] = [];
   selectedItem: any;
   tag: any[] = [];
+  file: any;
   allComments: any[] = [];
 
   form: FormGroup = this.fb.group({
@@ -53,8 +55,6 @@ export class UpdatePostComponent implements OnInit {
       ],
     ],
     file: ['', [Validators.required]],
-    taggedPeople: [[]],
-    searchText: [''],
   });
 
   ngOnInit(): void {
@@ -72,11 +72,31 @@ export class UpdatePostComponent implements OnInit {
       this.setComments();
     }
 
-    // console.log(this.activatedRoute);
     this.getPost();
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if (this.form.invalid) {
+      this.sweetAlert.error('Fill form correctly !!');
+    }
+
+    const formData = new FormData();
+    formData.append('caption', this.form.value.caption);
+    if (this.file) {
+      formData.append('file', this.file);
+    }
+    this.apiCalls.updatePost(formData, this.postSelected).subscribe({
+      next: (data) => {
+        this.sweetAlert.success('Post updated successfully !!');
+        this.router.navigate([ROUTES_UI.USER, this.userSelected]);
+      },
+      error: (error) => {
+        console.log("ERROR is:",error);
+
+        this.sweetAlert.error('Something went wrong !!');
+      },
+    });
+  }
   setComments() {
     this.apiCalls
       .getCommentsOfPost(this.postSelected, this.allComments.length)
@@ -95,7 +115,6 @@ export class UpdatePostComponent implements OnInit {
   getPost() {
     this.apiCalls.getUserSinglePost(this.postSelected).subscribe({
       next: (data: any) => {
-        console.log(data);
         this.form.controls['caption'].setValue(data[0].caption);
         this.imagePreview = API_ROUTES.BASE_URL + '/' + data[0].imageOrVideo;
         // this.items = data;
@@ -103,14 +122,14 @@ export class UpdatePostComponent implements OnInit {
         this.tag = this.selectedItem.taggedPeople;
       },
       error: (err) => {
-        console.log(err);
+        console.log("ERROR is:",err);
       },
     });
   }
 
   onFileChange(event: any) {
     const file = event.target.files[0];
-    console.log(file);
+    this.file = file;
 
     if (file) {
       const reader = new FileReader();
@@ -142,7 +161,6 @@ export class UpdatePostComponent implements OnInit {
     ) {
       this.tag.push(this.selectedItem.item);
       this.sweetAlert.success('User Added to Tagged List');
-      console.log(this.tag);
     } else {
       this.sweetAlert.error('Add a Valid User !!');
     }

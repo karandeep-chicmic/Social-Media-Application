@@ -95,7 +95,7 @@ export class ApiCallsService {
   }
 
   addPosts(formDataPost: FormData) {
-    console.log(formDataPost);
+    console.log('ERROR is:', formDataPost);
 
     return this.http.post(
       `${API_ROUTES.BASE_URL}${API_ROUTES.ADD_POSTS}`,
@@ -151,5 +151,23 @@ export class ApiCallsService {
 
   getUserGroups() {
     return this.http.get(`${API_ROUTES.BASE_URL}${API_ROUTES.GET_GROUPS}`);
+  }
+  updatePost(formData: FormData, postId: string) {
+    return this.http.put(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.UPDATE_POST}/${postId}`,
+      formData
+    );
+  }
+
+  addSocket(socketId: string) {
+    return this.http.post(`${API_ROUTES.BASE_URL}${API_ROUTES.ADD_SOCKET}`, {
+      socketId: socketId,
+    });
+  }
+
+  removeSocket(socketId: string) {
+    return this.http.delete(
+      `${API_ROUTES.BASE_URL}${API_ROUTES.REMOVE_SOCKET}/${socketId}`
+    );
   }
 }

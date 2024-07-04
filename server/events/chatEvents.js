@@ -1,7 +1,9 @@
 const { messagesModel } = require("../models/chatModels/messagesModel");
 const { roomModel } = require("../models/chatModels/roomsModel");
-const { SOCKET_EVENTS } = require("../utils/constants");
+const { SOCKET_EVENTS, RESPONSE_MSGS } = require("../utils/constants");
 const { userModel } = require("../models/userModel");
+const { socketsModel } = require("../models/chatModels/socketsModel");
+const { socketAuth } = require("../middlewares/socketAuthMiddleware");
 
 // Creating a room name for user
 const createRoomName = (senderId, receiverId) => {
@@ -11,6 +13,7 @@ const createRoomName = (senderId, receiverId) => {
 const events = async (socket, io) => {
   console.log("New user connected to chat with id : ", socket.id);
 
+  // io.use(socketAuth);
   // join room by roomName
   socket.on(SOCKET_EVENTS.JOIN_BY_ROOM_NAME, (roomName) => {
     socket.join(roomName);
@@ -107,6 +110,54 @@ const events = async (socket, io) => {
         callback({ messageSent });
       } catch (e) {
         console.log(e);
+      }
+    }
+  );
+  socket.on(SOCKET_EVENTS.JOIN_ROOMS_ALL, async (userId, callback) => {
+    if (typeof callback !== "function") {
+      console.error("Callback is not a function");
+      return;
+    }
+    try {
+      const allRooms = await roomModel.find({ user: userId });
+
+      allRooms.forEach((data) => {
+        socket.join(data.roomName);
+      });
+
+      callback({
+        message: RESPONSE_MSGS.JOINED_ALL,
+      });
+    } catch (error) {
+      callback({ error });
+      console.log("ERROR is:", error);
+    }
+  });
+
+  // Notifications emit
+  socket.on(
+    SOCKET_EVENTS.SEND_REQ_NOTIFICATION,
+    async (friendId, userId, callback) => {
+      if (typeof callback !== "function") {
+        console.error("Callback is not a function");
+        return;
+      }
+
+      // Fetch the socket information for the friend
+      const findSocket = await socketsModel.find({ user: friendId });
+
+      // Fetch the user information for the sender
+      const userFind = await userModel.find({ _id: userId });
+
+      if (findSocket.length > 0 && userFind.length > 0) {
+        // Emit the notification to each socket ID of the friend
+        findSocket.forEach((data) => {
+          socket.to(data.socketId).emit("request-notification", userFind[0]);
+        });
+        // callback with a success message
+        callback({ message: RESPONSE_MSGS.SENT_NOTIFICATION });
+      } else {
+        callback({ message: RESPONSE_MSGS.FAILURE });
       }
     }
   );

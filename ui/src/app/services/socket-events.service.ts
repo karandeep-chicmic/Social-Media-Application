@@ -23,22 +23,56 @@ export class SocketEventsService {
   chatMessages: any[] = [];
 
   constructor() {
-    this.socket = io(`${API_ROUTES.BASE_URL}${API_ROUTES.CHAT}`);
+    if (sessionStorage.getItem('token')) {
+      this.connectUser();
+    }
+  }
+
+  connectUser() {
+    this.socket = io(`${API_ROUTES.BASE_URL}${API_ROUTES.CHAT}`, {
+      auth: {
+        token: sessionStorage.getItem('token') ?? '',
+      },
+    });
+
+    // console.log(this.socket);
+
     this.socket.on(SOCKET_EVENTS.CONNECTION, () => {
       console.log('connected');
+      console.log(this.socket.id);
+
+      this.apiCalls.addSocket(this.socket.id).subscribe({
+        next: (res: any) => {
+          sessionStorage.setItem('socketId', res.data._id);
+        },
+        error: (err) => {
+          console.log('ERROR is: ', err);
+        },
+      });
+    });
+
+    this.socket.on('disconnect', () => {
+      console.log('disconnected');
     });
 
     this.socket.on(SOCKET_EVENTS.RECEIVE_MESSAGE, (data) => {
       console.log('received message', data);
-      console.log('selectedId', this.selectedUser());
 
-      if (data.sendersId !== this.selectedUser()) {
+      if (data.sendersId !== (sessionStorage.getItem('userId') ?? '')) {
         this.sweetAlert.success('message received :' + data.messageContent);
         this.messagesSubject.next({
           messageSent: data,
         });
       }
     });
+
+    this.socket.on('request-notification', (data) => {
+      this.sweetAlert.success(`Request Received from ${data.username}`);
+    });
+  }
+
+  disconnectUser() {
+    this.socket?.disconnect();
   }
 
   trigger(data: any) {
@@ -53,7 +87,6 @@ export class SocketEventsService {
       messageContent,
       (data: any) => {
         this.messagesSubject.next(data);
-        console.log('from send', data);
       }
     );
   }
@@ -84,17 +117,37 @@ export class SocketEventsService {
             res.data._id,
             (data: any) => {
               console.log('from create group', data);
+              return data;
             }
           );
         });
       },
       error: (err: any) => {
-        console.log(err);
+        console.log('ERROR is:', err);
+        return err;
       },
     });
   }
 
   joinByGroupName(name: string) {
     this.socket.emit(SOCKET_EVENTS.JOIN_BY_ROOM_NAME, name);
+  }
+
+  joinAllGroupsAndUsers(userId: any) {
+    this.socket.emit(SOCKET_EVENTS.JOIN_ROOMS_ALL, userId, () => {
+      console.log('joined all rooms');
+    });
+  }
+
+  // Notifications
+  emitFriendReqNotification(friendId: string, userId: string) {
+    this.socket.emit(
+      SOCKET_EVENTS.SEND_REQ_NOTIFICATION,
+      friendId,
+      userId,
+      (data: any) => {
+        console.log(data);
+      }
+    );
   }
 }

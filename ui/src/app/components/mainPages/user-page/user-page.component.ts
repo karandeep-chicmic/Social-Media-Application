@@ -6,6 +6,7 @@ import { ROUTES_UI } from '../../../constants';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { NavbarComponent } from '../../home/navbar/navbar.component';
 import Swal from 'sweetalert2';
+import { SocketEventsService } from '../../../services/socket-events.service';
 
 @Component({
   selector: 'app-user-page',
@@ -18,6 +19,7 @@ export class UserPageComponent implements OnInit {
   activatedRoutes: ActivatedRoute = inject(ActivatedRoute);
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
+  sockets: SocketEventsService = inject(SocketEventsService);
   router: Router = inject(Router);
 
   userId: string = '';
@@ -36,12 +38,10 @@ export class UserPageComponent implements OnInit {
 
     this.apiCalls.getFriendsLength(this.userId).subscribe({
       next: (data: any) => {
-        console.log(data);
-
         this.totalFriends = data.data.length;
       },
       error: (err) => {
-        console.log(err);
+        console.log('ERROR is:', err);
       },
     });
   }
@@ -50,12 +50,11 @@ export class UserPageComponent implements OnInit {
     this.apiCalls.getProfileDetails(this.userId).subscribe({
       next: (data: any) => {
         this.userData = data.data[0];
-        console.log('userData', this.userData);
       },
       error: (err: any) => {
         this.privatePage = true;
         this.userData = err?.error?.data?.[0];
-        console.log(err.error.data);
+        console.log('ERROR is:', err.error.data);
       },
     });
   }
@@ -79,7 +78,6 @@ export class UserPageComponent implements OnInit {
       if (result.isConfirmed) {
         this.apiCalls.removeFriends(this.userData._id).subscribe({
           next: (data: any) => {
-            console.log(data);
             this.sweetAlert.success('Friend Removed Successfully');
             this.router.navigate([ROUTES_UI.FEED]);
           },
@@ -94,8 +92,9 @@ export class UserPageComponent implements OnInit {
   addFriend() {
     this.apiCalls.sendFriendRequest(this.userData._id).subscribe({
       next: (data: any) => {
-        console.log(data);
         this.sweetAlert.success('Friend Request Sent Successfully');
+
+        this.sockets.emitFriendReqNotification(this.userData._id, this.userId);
         this.router.navigate([ROUTES_UI.FEED]);
       },
       error: (err: any) => {

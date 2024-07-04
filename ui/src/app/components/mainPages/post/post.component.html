@@ -10,14 +10,15 @@
     [src]="'http://localhost:3400/' + post.imageOrVideo"
     class="card-img-top image"
     alt="Post image or video"
+    (click)="navigateToPostPage()"
   />
   <div class="card-header">
     <h5>{{ post.caption }}</h5>
     <p class="card-text" *ngIf="post.taggedPeople.length > 0">
       👥
       <span *ngFor="let person of post.taggedPeople">
-        <a class="btn btn-light" [routerLink]="['/user', person.id]">
-          {{ person.username }}
+        <a class="btn btn-light" [routerLink]="['/user', person._id]">
+          {{ person.username }} 
         </a>
       </span>
     </p>
