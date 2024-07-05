@@ -11,11 +11,16 @@
 body {
   overflow: auto;
 }
-body{
+body {
   overflow: hidden;
 }
 
 .main-container {
   overflow: auto;
   height: 800px;
+}
+
+.validator-span {
+  color: red;
+  font-size: 12px;
 }

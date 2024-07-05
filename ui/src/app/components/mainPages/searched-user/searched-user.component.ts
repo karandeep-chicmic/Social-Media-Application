@@ -56,11 +56,9 @@ export class SearchedUserComponent implements OnChanges, OnInit {
             element.reqSent = true;
           }
         });
-        // Emit the notification
 
-        console.log("Emit the notification", id, this.userId);
-        
-        this.sockets.emitFriendReqNotification(id,this.userId);
+        // Emit the notification
+        this.sockets.emitFriendReqNotification(id, this.userId, 1);
       },
       error: (err) => {
         this.sweetAlert.error('ERROR while Sending friend Request !!');

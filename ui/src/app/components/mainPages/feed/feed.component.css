@@ -70,3 +70,8 @@
   overflow: auto;
   height: 800px;
 }
+
+.addFriends{
+  position: fixed;
+  color: #6d6d6d;
+}

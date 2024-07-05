@@ -12,6 +12,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { noWhitespaceValidator } from '../../../validators/no-white-space-validator';
+import { noStartingWhiteSpace } from '../../../validators/starting-whitespace-validator';
 
 @Component({
   selector: 'app-post',
@@ -42,7 +44,7 @@ export class PostComponent implements OnInit {
   allComments: any[] = [];
 
   form: FormGroup = this.fb.group({
-    comment: ['', [Validators.required]],
+    comment: ['', [Validators.required, noStartingWhiteSpace()]],
   });
 
   ngOnInit(): void {
@@ -62,7 +64,7 @@ export class PostComponent implements OnInit {
           });
         },
         error: (err) => {
-          this.sweetAlert.error(err.error.message);
+          this.sweetAlert.error('No more Comments');
         },
       });
   }
@@ -104,14 +106,14 @@ export class PostComponent implements OnInit {
   }
   comment() {
     if (this.form.invalid) {
-      this.sweetAlert.error('Comments Field cant be empty..');
+      this.sweetAlert.error('Comment Field is Invalid !!');
+      return;
     }
 
     this.apiCalls
       .addAComment(this.form.value.comment, this.post._id)
       .subscribe({
         next: (data: any) => {
-
           this.allComments.push(data.data);
           // this.post.comments.push(data.data);
 

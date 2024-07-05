@@ -19,3 +19,9 @@ span {
   overflow: auto;
   height: 800px;
 }
+.request-sent {
+  color: red;
+}
+.friends {
+  color: green;
+}

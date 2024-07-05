@@ -1,3 +1,5 @@
+
+
 <div class="chat-header clearfix">
   <div #chatHistory class="chat-history" (scroll)="loadMoreMsgs()">
     <!-- <div class="d-flex justify-content-center mb-2"> -->
@@ -42,8 +44,8 @@
 
       <li *ngIf="chat?.sendersId !== userLoggedIn">
         <div class="message-data">
-          <span class="message-data-name"
-            ><i class="fa fa-circle online"></i> {{ chat?.senderEmail }}</span
+          <span class="message-data-name"  *ngIf="groupOrNot"
+            ><i class="fa fa-circle online"></i> {{ chat.sendersId }}</span
           >
           <span class="message-data-time">{{
             chat?.createdAt | date : "short"

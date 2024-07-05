@@ -18,7 +18,7 @@
       👥
       <span *ngFor="let person of post.taggedPeople">
         <a class="btn btn-light" [routerLink]="['/user', person._id]">
-          {{ person.username }} 
+          {{ person.username }}
         </a>
       </span>
     </p>
@@ -87,7 +87,11 @@
     >
   </div>
   <div class="load-more-comments">
-    <span type="button" class="load-more-comments-span" (click)="getComments()"
+    <span
+      type="button"
+      *ngIf="allComments.length % 5 === 0"
+      class="load-more-comments-span"
+      (click)="getComments()"
       >...load more comments</span
     >
   </div>
@@ -103,8 +107,23 @@
         class="form-control input-modal"
         type="text"
       />
+
       <button type="submit" class="btn btn-dark ml-2">Add Comment</button>
     </div>
+    <br /><span *ngIf="form.controls['comment'].touched">
+      <span
+        class="validator-span"
+        *ngIf="form.controls['comment']?.errors?.['required']"
+      >
+        This field is Required</span
+      >
+      <span
+        class="validator-span"
+        *ngIf="form.controls['comment']?.errors?.['whitespace']"
+      >
+        ,Comments cant start with space</span
+      >
+    </span>
   </form>
 </app-modal>
 

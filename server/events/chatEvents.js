@@ -3,7 +3,6 @@ const { roomModel } = require("../models/chatModels/roomsModel");
 const { SOCKET_EVENTS, RESPONSE_MSGS } = require("../utils/constants");
 const { userModel } = require("../models/userModel");
 const { socketsModel } = require("../models/chatModels/socketsModel");
-const { socketAuth } = require("../middlewares/socketAuthMiddleware");
 
 // Creating a room name for user
 const createRoomName = (senderId, receiverId) => {
@@ -137,7 +136,7 @@ const events = async (socket, io) => {
   // Notifications emit
   socket.on(
     SOCKET_EVENTS.SEND_REQ_NOTIFICATION,
-    async (friendId, userId, callback) => {
+    async (friendId, userId, accept, callback) => {
       if (typeof callback !== "function") {
         console.error("Callback is not a function");
         return;
@@ -152,7 +151,10 @@ const events = async (socket, io) => {
       if (findSocket.length > 0 && userFind.length > 0) {
         // Emit the notification to each socket ID of the friend
         findSocket.forEach((data) => {
-          socket.to(data.socketId).emit("request-notification", userFind[0]);
+          socket.to(data.socketId).emit(SOCKET_EVENTS.RECEIVE_FRIEND_REQ, {
+            username: userFind[0].username,
+            accept: accept,
+          });
         });
         // callback with a success message
         callback({ message: RESPONSE_MSGS.SENT_NOTIFICATION });

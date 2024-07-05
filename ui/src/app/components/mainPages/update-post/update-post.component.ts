@@ -91,7 +91,7 @@ export class UpdatePostComponent implements OnInit {
         this.router.navigate([ROUTES_UI.USER, this.userSelected]);
       },
       error: (error) => {
-        console.log("ERROR is:",error);
+        console.log('ERROR is:', error);
 
         this.sweetAlert.error('Something went wrong !!');
       },
@@ -107,7 +107,7 @@ export class UpdatePostComponent implements OnInit {
           });
         },
         error: (err) => {
-          this.sweetAlert.error(err.error.message);
+          this.sweetAlert.error('Cant get comments of post!!');
         },
       });
   }
@@ -122,7 +122,7 @@ export class UpdatePostComponent implements OnInit {
         this.tag = this.selectedItem.taggedPeople;
       },
       error: (err) => {
-        console.log("ERROR is:",err);
+        console.log('ERROR is:', err);
       },
     });
   }

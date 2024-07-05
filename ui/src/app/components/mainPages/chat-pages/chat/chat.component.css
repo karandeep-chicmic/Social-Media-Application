@@ -349,3 +349,9 @@ input[type="file"] {
   color: #4a4a4a;
   word-break: break-word;
 }
+
+.name{
+  font-size: 19px;
+  font-weight: bold;
+  color: #3c4634;
+}

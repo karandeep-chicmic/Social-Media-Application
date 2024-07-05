@@ -94,11 +94,15 @@ export class UserPageComponent implements OnInit {
       next: (data: any) => {
         this.sweetAlert.success('Friend Request Sent Successfully');
 
-        this.sockets.emitFriendReqNotification(this.userData._id, this.userId);
+        this.sockets.emitFriendReqNotification(
+          this.userData._id,
+          this.userId,
+          1
+        );
         this.router.navigate([ROUTES_UI.FEED]);
       },
       error: (err: any) => {
-        this.sweetAlert.error(err.message);
+        this.sweetAlert.error('Cant send Friend Request !!');
       },
     });
   }

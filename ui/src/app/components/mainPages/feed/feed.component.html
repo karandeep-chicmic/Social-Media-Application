@@ -19,6 +19,12 @@
       <div class="card-body">
         <app-post *ngFor="let post of postsData" [post]="post"></app-post>
       </div>
+      <div class="p-3 " *ngIf="postsData.length < 1">
+        <h3>No posts found for User.</h3>
+      </div>
+      <div class="p-4 mb-5" *ngIf="postsData.length < 1">
+        <span class="addFriends">Add Friends to see their posts.</span>
+      </div>
     </div>
   </div>
 
@@ -46,4 +52,3 @@
     </a>
   </div>
 </div>
-

@@ -23,8 +23,10 @@ export class SocketEventsService {
   chatMessages: any[] = [];
 
   constructor() {
+    const user = sessionStorage.getItem('userId');
     if (sessionStorage.getItem('token')) {
       this.connectUser();
+      this.joinAllGroupsAndUsers(user);
     }
   }
 
@@ -66,8 +68,20 @@ export class SocketEventsService {
       }
     });
 
-    this.socket.on('request-notification', (data) => {
-      this.sweetAlert.success(`Request Received from ${data.username}`);
+    this.socket.on(SOCKET_EVENTS.RECEIVE_FRIEND_REQ, (data) => {
+      if (data.accept === 1) {
+        this.sweetAlert.success(`Request Received from ${data.username} !!`);
+      } else if (data.accept === 2) {
+        this.sweetAlert.success(
+          `User ${data.username} tagged you in a post !!`
+        );
+      } else if (data.accept === 3) {
+        this.sweetAlert.success(
+          `${data.username} has accepted your friend request !!`
+        );
+      }
+
+      console.log('from Notification', data);
     });
   }
 
@@ -103,6 +117,7 @@ export class SocketEventsService {
     );
   }
 
+  // join group on basis of room name
   joinGroupRoom(name: string, user: string) {
     this.socket.emit(SOCKET_EVENTS.GROUP_JOIN, user, name, (data: any) => {});
   }
@@ -110,6 +125,7 @@ export class SocketEventsService {
   createGroup(usersArray: any[], name: string) {
     this.apiCalls.createGroup(name).subscribe({
       next: (res: any) => {
+
         usersArray.forEach((data) => {
           this.socket.emit(
             SOCKET_EVENTS.GROUP_JOIN,
@@ -117,10 +133,10 @@ export class SocketEventsService {
             res.data._id,
             (data: any) => {
               console.log('from create group', data);
-              return data;
             }
           );
         });
+        return res.data;
       },
       error: (err: any) => {
         console.log('ERROR is:', err);
@@ -140,11 +156,12 @@ export class SocketEventsService {
   }
 
   // Notifications
-  emitFriendReqNotification(friendId: string, userId: string) {
+  emitFriendReqNotification(friendId: string, userId: string, accept: number) {
     this.socket.emit(
       SOCKET_EVENTS.SEND_REQ_NOTIFICATION,
       friendId,
       userId,
+      accept,
       (data: any) => {
         console.log(data);
       }

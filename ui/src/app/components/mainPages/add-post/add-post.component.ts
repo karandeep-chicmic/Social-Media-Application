@@ -13,6 +13,7 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ApiCallsService } from '../../../services/api-calls.service';
 import { Router } from '@angular/router';
 import { ROUTES_UI } from '../../../constants';
+import { SocketEventsService } from '../../../services/socket-events.service';
 
 @Component({
   selector: 'app-add-post',
@@ -26,6 +27,7 @@ export class AddPostComponent implements OnInit {
   sweetAlert: SweetAlertService = inject(SweetAlertService);
   apiCalls: ApiCallsService = inject(ApiCallsService);
   router: Router = inject(Router);
+  socket: SocketEventsService = inject(SocketEventsService);
 
   searchedText: string = '';
   private searchSubject = new Subject<string>();
@@ -66,15 +68,18 @@ export class AddPostComponent implements OnInit {
   }
 
   onSubmit() {
-   
     if (this.form.invalid) {
       this.sweetAlert.error('Please fill all the fields Correctly');
+      return;
     }
 
     const formData = new FormData();
     formData.append('caption', this.form.value?.caption);
     formData.append('file', this.form.value?.file);
     formData.append('taggedPeople', JSON.stringify(this.tag));
+
+    console.log(this.tag);
+    // return
 
     this.apiCalls.addPosts(formData).subscribe({
       next: (res: any) => {
@@ -83,6 +88,14 @@ export class AddPostComponent implements OnInit {
           ROUTES_UI.USER,
           sessionStorage.getItem('userId') || '',
         ]);
+
+        this.tag.forEach((data: any) => {
+          this.socket.emitFriendReqNotification(
+            data._id,
+            sessionStorage.getItem('userId'),
+            2
+          );
+        });
       },
       error: (err) => {
         console.log('ERROR is: ', err);

@@ -62,4 +62,6 @@ export const SOCKET_EVENTS = {
   JOIN_BY_ROOM_NAME: 'join-by-room-name',
   JOIN_ROOMS_ALL: 'join-all-rooms',
   SEND_REQ_NOTIFICATION: 'send-req-notification',
+  RECEIVE_FRIEND_REQ: 'request-notification',
+  ACCEPT_REQ_NOTIFICATION: "accept-req-notification",
 };
