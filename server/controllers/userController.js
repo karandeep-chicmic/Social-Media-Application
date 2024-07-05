@@ -288,8 +288,19 @@ const searchUsersOnSearchText = async (payload) => {
       },
     },
     {
+      $addFields: {
+        reqReceived: {
+          $cond: {
+            if: { $eq: ["$_id", "$friends.user"] },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+    {
       $project: {
-        friends: 0,
+        // friends: 0,
         password: 0,
         email: 0,
         privacy: 0,

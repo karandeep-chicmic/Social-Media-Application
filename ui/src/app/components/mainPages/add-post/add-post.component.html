@@ -26,6 +26,28 @@
           type="text"
           placeholder="This is the caption for your Posts !!"
         ></textarea>
+        <!-- Validations Start -->
+        <br /><span *ngIf="form.controls['caption'].touched">
+          <span
+            class="validator-span"
+            *ngIf="form.controls['caption']?.errors?.['required']"
+          >
+            This Above field is Required</span
+          >
+          <span
+            class="validator-span"
+            *ngIf="form.controls['caption']?.errors?.['minlength']"
+          >
+            minimum length is 8 characters for caption</span
+          >
+          <span
+            class="validator-span"
+            *ngIf="form.controls['caption']?.errors?.['maxlength']"
+          >
+            Max length is 200 characters for caption</span
+          >
+        </span>
+        <!-- Validations End -->
       </div>
       <div class="form-group">
         <input
@@ -56,8 +78,12 @@
         <div class="mb-4">
           <div class="taggedPeople">
             <span>Tagged Users: </span>
-            <button class="btn btn-info p-2 mr-2" type="button" *ngFor="let item of tag">
-              {{"@"}}{{ item.username }}
+            <button
+              class="btn btn-info p-2 mr-2"
+              type="button"
+              *ngFor="let item of tag"
+            >
+              {{ "@" }}{{ item.username }}
             </button>
           </div>
         </div>

@@ -60,12 +60,23 @@ const getUserGroups = async (payload) => {
         groupId: "$matchedGroup._id",
       },
     },
+    {
+      $group: {
+        _id: "$groupId",
+        roomName: { $first: "$roomName" },
+        user: { $first: "$user" },
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
+        groupName: { $first: "$groupName" },
+        groupId: { $first: "$groupId" },
+      },
+    },
   ]);
 
-  return{
+  return {
     statusCode: 200,
-    data: getGroups
-  }
+    data: getGroups,
+  };
 };
 
 module.exports = { createGroup, getUserGroups };

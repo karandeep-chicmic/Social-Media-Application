@@ -270,8 +270,6 @@ const feedForUser = async (payload) => {
       select: ["username", "profilePicture"],
     });
 
-   
-
     const updatedPosts = await Promise.all(
       posts.map(async (data) => {
         const { userUploaded } = data;

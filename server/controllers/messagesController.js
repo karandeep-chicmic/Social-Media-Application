@@ -11,6 +11,7 @@ const getMessages = async (payload) => {
     .sort({ createdAt: -1 })
     .skip(length)
     .limit(6);
+  // .populate("sendersId", ["username", "profilePicture", "name"]);
 
   const roomExistsOrNot = await roomModel.find({
     user: userId,

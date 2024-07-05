@@ -27,7 +27,10 @@ h2 {
 }
 
 /* STRUCTURE */
-
+.validator-span{
+  color: red;
+  font-size: 12px;
+}
 .wrapper {
   display: flex;
   align-items: center;

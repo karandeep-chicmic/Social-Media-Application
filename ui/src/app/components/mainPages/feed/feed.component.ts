@@ -85,7 +85,7 @@ export class FeedComponent implements OnInit, OnDestroy {
       error: (err: any) => {
         console.log('Error is: ', err);
 
-        this.sweetAlert.error(err.message);
+        this.sweetAlert.error('Cant Get User Feed...');
       },
     });
   }

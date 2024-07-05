@@ -120,7 +120,7 @@ export class ChatComponent
       },
       error: (err) => {
         // this.chatMessages = [];
-        this.sweetAlert.error('No more Messages !!');
+        // this.sweetAlert.error('No more Messages !!');
         console.log('ERROR  is : ', err);
       },
     });

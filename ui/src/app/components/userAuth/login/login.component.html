@@ -13,6 +13,35 @@
         name="login"
         placeholder="username"
       />
+      <!-- Validations Start -->
+      <br /><span *ngIf="form.controls['username'].touched">
+        <span
+          class="validator-span"
+          *ngIf="form.controls['username']?.errors?.['required']"
+        >
+          This field is Required</span
+        >
+        <span
+          class="validator-span"
+          *ngIf="form.controls['username']?.errors?.['minlength']"
+        >
+          Minimum Length is 8 characters</span
+        >
+        <span
+          class="validator-span"
+          *ngIf="form.controls['username']?.errors?.['maxlength']"
+        >
+          Maximum Length is 20 characters</span
+        >
+        <span
+          class="validator-span"
+          *ngIf="form.controls['username']?.errors?.['whitespace']"
+        >
+          White space is not allowed</span
+        >
+      </span>
+      <!-- Validations End -->
+
       <input
         type="password"
         id="password"
@@ -21,6 +50,40 @@
         name="login"
         placeholder="password"
       />
+
+      <!-- Validations Start -->
+      <br /><span *ngIf="form.controls['password'].touched">
+        <span
+          class="validator-span"
+          *ngIf="form.controls['password']?.errors?.['required']"
+        >
+          This field is Required</span
+        >
+        <!-- {{form.controls['password']?.errors | json}} -->
+        <span
+          class="validator-span"
+          *ngIf="form.controls['password']?.errors?.['minlength']"
+        >
+          Minimum length for password is 8 characters</span
+        >
+        <span
+          class="validator-span"
+          *ngIf="form.controls['password']?.errors?.['whitespace']"
+        >
+          , White space is not allowed</span
+        >
+      </span>
+
+      <span
+        class="validator-span"
+        *ngIf="form.controls['password']?.errors?.['maxlength']"
+      >
+        Maximum Length is 20 characters</span
+      >
+      <br />
+
+      <!-- Validations End -->
+
       <input type="submit" class="fadeIn fourth" value="Log In" />
     </form>
 

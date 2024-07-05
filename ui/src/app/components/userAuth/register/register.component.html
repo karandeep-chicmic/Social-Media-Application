@@ -13,6 +13,16 @@
         name="login"
         placeholder="name"
       />
+
+      <br /><span *ngIf="form.controls['name'].touched">
+        <span
+          class="validator-span"
+          *ngIf="form.controls['name']?.errors?.['required']"
+        >
+          This field is Required</span
+        >
+      </span>
+
       <input
         type="text"
         id="login"
@@ -21,6 +31,29 @@
         name="login"
         placeholder="username"
       />
+      
+      <!-- Validations Start -->
+      <br /><span *ngIf="form.controls['username'].touched">
+        <span
+        class="validator-span"
+        *ngIf="form.controls['username']?.errors?.['required']"
+        >
+        This field is Required</span
+        >
+        <span
+        class="validator-span"
+        *ngIf="form.controls['username']?.errors?.['minlength']"
+        >
+        Minimum length for password is 8 characters</span
+        >
+        <span
+        class="validator-span"
+        *ngIf="form.controls['username']?.errors?.['maxlength']"
+        >
+        Maximum Length is 20 characters</span
+        >
+      </span>
+      <!-- Validations End -->
       <input
         type="text"
         id="login"
@@ -29,6 +62,24 @@
         name="login"
         placeholder="email"
       />
+      <!-- Validations Start -->
+      <br /><span *ngIf="form.controls['email'].touched">
+        <span
+          class="validator-span"
+          *ngIf="form.controls['email']?.errors?.['email']"
+        >
+          Enter Valid Email</span
+        >
+        <span
+          class="validator-span"
+          *ngIf="form.controls['email']?.errors?.['required']"
+        >
+          This field is Required</span
+        >
+      </span>
+      <!-- Validations End -->
+
+
       <input
         type="password"
         id="password"
@@ -38,7 +89,23 @@
         placeholder="password"
       />
 
-      <input type="file" class="input mb-4 mt-3 ml-4 fadeIn third" (input)="photoUpload($event)" />
+      <!-- Validations Start -->
+      <br /><span *ngIf="form.controls['password'].touched">
+        <span
+        class="validator-span"
+        *ngIf="form.controls['password']?.errors?.['required']"
+        >
+        This field is Required</span
+        >
+      </span>
+      <!-- Validations End -->
+
+      <input
+        type="file"
+        class="input mb-4 mt-3 ml-4 fadeIn third "
+        (input)="photoUpload($event)"
+      />
+     
 
       <input type="submit" class="fadeIn fourth" value="Log In" />
     </form>

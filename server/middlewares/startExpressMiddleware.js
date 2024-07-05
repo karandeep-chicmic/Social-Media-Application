@@ -9,6 +9,13 @@ const { authorizeUser } = require("./authMiddleware");
 const { Server } = require("socket.io");
 const { events } = require("../events/chatEvents");
 const { socketAuth } = require("./socketAuthMiddleware");
+const { loggerModel } = require("../models/loggerModel");
+
+const {
+  CORS_ORIGIN,
+  SOCKET_EVENTS,
+  CHAT_NAMESPACES,
+} = require("../utils/constants");
 
 const storage = multer.diskStorage({
   destination: "./public",
@@ -32,10 +39,18 @@ const handlers = (route) => {
 
     route
       .controller(payload)
-      .then((result) => {
+      .then(async (result) => {
+        await loggerModel.create({
+          action: result.statusCode,
+          message: result.data.message ? result.data.message : "success",
+        });
         res.status(result.statusCode).json(result.data);
       })
-      .catch((err) => {
+      .catch(async (err) => {
+        await loggerModel.create({
+          action: err.statusCode ? err.statusCode : 500,
+          message: err.data ? result.data : "ERROR",
+        });
         if (err?.statusCode) {
           res.status(err?.statusCode).json(err.message);
         }
@@ -52,7 +67,7 @@ const startExpressApplication = async (app, server) => {
 
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:4200",
+      origin: CORS_ORIGIN,
     },
     connectionStateRecovery: {
       maxDisconnectionDuration: 2 * 60 * 1000,
@@ -60,22 +75,11 @@ const startExpressApplication = async (app, server) => {
     },
   });
 
-  // to use middlewares in sockets ?
-  // io.of("/chat").use(socketAuth);
+  const chatNamespace = io.of(CHAT_NAMESPACES.CHAT);
 
-  // io.of("/chat").use((socket, next) => {
-  //   // Middleware logic here
-  //   if (socket.handshake.auth.token) {
-  //     const flag = socketAuth(socket.handshake.auth.token);
-  //     if (flag) {
-  //       next();
-  //     }else{
-  //       console.log();
-  //     }
-  //   }
-  // });
-
-  io.of("/chat").on("connection", async (socket) => {
+  // middlewares
+  // chatNamespace.use(socketAuth());
+  chatNamespace.on(SOCKET_EVENTS.CONNECTION, async (socket) => {
     await events(socket, io);
   });
 

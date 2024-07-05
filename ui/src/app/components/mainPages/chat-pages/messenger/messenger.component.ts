@@ -67,6 +67,8 @@ export class MessengerComponent implements OnInit {
   ngOnInit(): void {
     this.setUsers(true);
 
+    this.sockets.joinAllGroupsAndUsers(sessionStorage.getItem('userId'));
+
     this.sockets.subjectToUpdate.subscribe(() => {
       this.setUsers();
     });
@@ -123,7 +125,7 @@ export class MessengerComponent implements OnInit {
         }
       },
       error: (err: any) => {
-        this.sweetAlert.error(err.error.message);
+        this.sweetAlert.error("Can't get User Friends !!");
       },
     });
   }
@@ -190,9 +192,16 @@ export class MessengerComponent implements OnInit {
       this.sweetAlert.error('Group name and users are required !!');
     }
 
-    const res = this.sockets.createGroup(
+    const res: any = this.sockets.createGroup(
       this.usersToAddToGroup,
       this.form.value.name
+    );
+
+    console.log('create group', res?.roomId);
+
+    this.sockets.joinGroupRoom(
+      res?.roomId,
+      sessionStorage.getItem('userId') ?? ''
     );
     this.isModalVisible = !this.isModalVisible;
   }

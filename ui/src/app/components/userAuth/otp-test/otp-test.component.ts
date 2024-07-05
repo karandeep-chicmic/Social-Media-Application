@@ -73,8 +73,8 @@ export class OtpTestComponent implements OnInit {
           this.router.navigate([ROUTES_UI.FEED]);
         },
         error: (err) => {
-          console.log("ERROR is:",err);
-          this.sweetAlert.error(err);
+          console.log('ERROR is:', err);
+          this.sweetAlert.error('Wrong Otp!!');
         },
       });
     } else {

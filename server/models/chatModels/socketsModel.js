@@ -11,9 +11,13 @@ const socketsSchema = new Schema(
       required: true,
       ref: "users",
     },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      expires: 60 * 10,
+    },
   },
   {
-    timestamps: true,
     versionKey: false,
   }
 );

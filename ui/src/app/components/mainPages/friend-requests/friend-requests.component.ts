@@ -3,6 +3,7 @@ import { NavbarComponent } from '../../home/navbar/navbar.component';
 import { ApiCallsService } from '../../../services/api-calls.service';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { SweetAlertService } from '../../../services/sweet-alert.service';
+import { SocketEventsService } from '../../../services/socket-events.service';
 
 @Component({
   selector: 'app-friend-requests',
@@ -14,6 +15,7 @@ import { SweetAlertService } from '../../../services/sweet-alert.service';
 export class FriendRequestsComponent implements OnInit {
   apiCalls: ApiCallsService = inject(ApiCallsService);
   sweetAlert: SweetAlertService = inject(SweetAlertService);
+  sockets: SocketEventsService = inject(SocketEventsService);
   friendRequests: any;
 
   ngOnInit(): void {
@@ -29,11 +31,20 @@ export class FriendRequestsComponent implements OnInit {
 
   acceptRequest(id: string) {
     this.apiCalls.acceptFriendRequest(id).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.friendRequests = this.friendRequests.filter((data: any) => {
           return String(data._id) !== String(id);
         });
         this.sweetAlert.success('Friend Request accepted !!');
+        console.log(id);
+
+        // this.sockets.joinRoom(id, sessionStorage.getItem('userId'));
+
+        // this.sockets.emitFriendReqNotification(
+        //   sessionStorage.getItem('userId'),
+        //   id,
+        //   3
+        // );
       },
       error: (err) => {
         console.log('ERROR is: ', err);

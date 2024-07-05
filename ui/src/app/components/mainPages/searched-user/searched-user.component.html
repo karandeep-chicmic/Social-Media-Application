@@ -13,17 +13,23 @@
               <b>{{ user.username }}</b>
             </div>
             <div class="">
-              <span *ngIf="user.isFriend"> you both are friends </span>
+              <span class="friends" *ngIf="user.isFriend"> you both are friends </span>
               <button
                 class="btn btn-dark"
-                *ngIf="!user.reqSent && !user.isFriend"
+                *ngIf="!user.reqSent && !user.isFriend && !user.reqReceived"
                 (click)="sendRequest(user._id)"
               >
                 Send Req
               </button>
-              <button *ngIf="user.reqSent" class="btn btn-success">
+              <button
+                *ngIf="user.reqReceived && !user.isFriend"
+                class="btn btn-success"
+              >
                 Accept Request
               </button>
+              <span class="request-sent" *ngIf="!user.isFriend && user.reqSent && !user.reqReceived"
+                >Request sent already</span
+              >
             </div>
           </div>
         </div>
