@@ -10,11 +10,10 @@ const socketAuth = () => {
         if (err) {
           throw err;
         } else {
-          console.log("Token Verified through middleware in socket!!");
+          console.log("Token Verified through middleware in socket !!");
           next();
         }
       });
-      next()
     } else {
       throw new Error("Token is not even generated !!");
     }
