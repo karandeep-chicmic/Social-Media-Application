@@ -78,7 +78,8 @@ const startExpressApplication = async (app, server) => {
   const chatNamespace = io.of(CHAT_NAMESPACES.CHAT);
 
   // middlewares
-  // chatNamespace.use(socketAuth());
+
+  chatNamespace.use(socketAuth());
   chatNamespace.on(SOCKET_EVENTS.CONNECTION, async (socket) => {
     await events(socket, io);
   });
